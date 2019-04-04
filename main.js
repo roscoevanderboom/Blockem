@@ -52,12 +52,12 @@ const play = () => {
 
     if (moves % 2 === 0) {
         moves = moves + 1;
-        newEl('i', '', 'far fa-circle', x);
+        newEl('i', '', 'far fa-circle flexCenter', x);
         pl1.classList.remove('w3-red');
         pl2.classList.add('w3-red');
     } else {
         moves = moves + 1;
-        newEl('i', '', 'fas fa-times', x);
+        newEl('i', '', 'fas fa-times flexCenter', x);
         pl1.classList.add('w3-red');
         pl2.classList.remove('w3-red');
     }
@@ -71,7 +71,7 @@ const play = () => {
 
 bigsq.forEach((val) => {
     for (i = 1; i < 10; i++) {
-        el = newEl('div', val.id + i, 'w3-border w3-border-black small flexCenter', val);
+        el = newEl('div', val.id + i, 'w3-border w3-border-black small', val);
     }
     val.classList.add('grid');
 });
