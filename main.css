@@ -5,7 +5,10 @@
 #wrapper {
     width: 600px;
     height: 600px; 
-    background-color: azure      
+    background-color: azure;
+    border-style: groove;
+    border-width: 25px;
+    border-color: chocolate;  
 }
 
 .grid {
