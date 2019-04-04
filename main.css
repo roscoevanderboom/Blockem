@@ -1,0 +1,36 @@
+/* 
+
+
+*/
+#wrapper {
+    width: 600px;
+    height: 600px; 
+    background-color: azure      
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+body {
+    background-color: cadetblue;
+}
+
+.borderLR {
+    border-left: 2px solid  rgb(255, 0, 0); ;  
+    border-right: 2px solid rgb(255, 0, 0); ;  
+}
+.borderTB {
+    border-top: 2px solid  rgb(255, 0, 0); ;   
+    border-bottom: 2px solid  rgb(255, 0, 0); ;  
+}
+
+.flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    font-size: -webkit-xxx-large;
+}
+
