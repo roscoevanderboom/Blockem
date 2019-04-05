@@ -1,4 +1,4 @@
-# Advanced TicTacToe
+# Animal-Farm
 Another project to practice Javascript.
 https://mios-v1.firebaseapp.com/projects/tictactoe/index.html
 
@@ -13,6 +13,6 @@ https://mios-v1.firebaseapp.com/projects/tictactoe/index.html
 </p>
 
 <h3>How to play</h3>
-<p>Player 1 starts the game. Every time you click, you not only place your token ( O or X ), you also designate 
+<p>Player 1 starts the game. Every time you click, you not only place your token, you also designate 
     where the next player will play. The game ends when the timer runs and you have not been able to move.
 </p>
