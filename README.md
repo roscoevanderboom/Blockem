@@ -1,4 +1,4 @@
-# Blockem
+# Animal-Farm
 Another project to practice Javascript.
 https://mios-v1.firebaseapp.com/projects/tictactoe/index.html
 
