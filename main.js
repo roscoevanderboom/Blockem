@@ -26,17 +26,18 @@ let clockDisplay = document.querySelector('#clock');
 
 // Game Variables
 let moves = 0;
-
-
 var timer;
+var winner;
 
-function move() {
+// Game Functions
+
+function startTimer() {
     var time = counter.value;
     var players = document.querySelectorAll('.player');
     timer = setInterval(countDown, 1000);
 
     function countDown() {
-        var winner;
+        
         if (time == 0) {
             clearInterval(timer);
             players.forEach((val) => {
@@ -54,13 +55,13 @@ function move() {
     return timer;
 }
 
-function stop() {
+function stopTimer() {
     clearInterval(timer);
     time = counter.value;
     clockDisplay.innerHTML = time;
 }
 
-counter.addEventListener('click', stop);
+counter.addEventListener('click', stopTimer);
 
 
 function play() {
@@ -68,42 +69,42 @@ function play() {
     let x = event.target;
     let parent = x.parentElement.classList;
 
-    // Stop current timer process
-    stop();
-
+    //  Check if move is valid
     // Check if small square has been played in
     if (x.classList.contains('p1') || x.classList.contains('p2')) {
-        alert('This square has been played. Please play in another square');
+        clockDisplay.innerHTML = 'This square has been played.';
         return;
     }
 
     // Check if big square is available
 
     if (parent.contains('w3-opacity-max')) {
-        alert('You may not play in this box. Please play in the open box');
+        clockDisplay.innerHTML = 'You may not play in this box.';
         return;
     }
 
     // Check to see whose turn is it and increment the counter ( moves )
     // Also add classes to player headings
-
     if (moves % 2 === 0) {
         moves = moves + 1;
-        newEl('i', '', 'p1 fas fa-cat flexCenter', x);
+        newEl('i', '', 'p1 cat flexCenter', x);
         pl1.classList.remove('w3-red');
         pl2.classList.add('w3-red');
     } else {
         moves = moves + 1;
-        newEl('i', '', 'p2 fas fa-dog flexCenter', x);
+        newEl('i', '', 'p2 dog flexCenter', x);
         pl1.classList.add('w3-red');
         pl2.classList.remove('w3-red');
     }
 
-    // Create opacity in big squares
+    // Stop current timer process
+    stopTimer();
+    startTimer();
 
+    // Create opacity in big squares
     zone(x.id);
-    move();
-};
+
+}
 
 // create small squares
 
@@ -119,7 +120,7 @@ let smlsq = wrapper.querySelectorAll('.small');
 let op = 'w3-opacity-max';
 
 function reset() {
-    stop();
+    stopTimer();
     moves = 0;
     smlsq.forEach(val => val.innerHTML = '');
     pl1.classList.add('w3-red');

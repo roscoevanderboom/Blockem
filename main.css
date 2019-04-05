@@ -50,3 +50,13 @@ body {
  #counter {
      width: 10%
  }
+
+ .cat {
+     background-image: url('http://chittagongit.com//images/cat-icon-png/cat-icon-png-2.jpg');
+     background-size: cover;
+ }
+
+ .dog {
+     background-image: url('http://www.newdesignfile.com/postpic/2010/12/free-dog-icons_337083.png');
+     background-size: cover;
+ }
