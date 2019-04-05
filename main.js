@@ -1,5 +1,4 @@
 // 
-// 
 // TICTACTOE Supercharged!!
 
 // General Functions
@@ -13,7 +12,6 @@ const newEl = (tag, id = '', cl = '', par = document.body) => {
 
 const log = (x => console.log(x));
 
-
 // HTML Elements
 
 let wrapper = document.querySelector('#wrapper');
@@ -23,19 +21,58 @@ let p2score = document.querySelector('#p2score');
 let pl1 = document.querySelector('#pl1');
 let pl2 = document.querySelector('#pl2');
 let resetBtn = document.querySelector('#reset');
+let counter = document.querySelector('#counter');
+let clockDisplay = document.querySelector('#clock');
 
 // Game Variables
 let moves = 0;
-let cross = 'fas';
-let circle = 'far';
 
-const play = () => {
+
+var timer;
+
+function move() {
+    var time = counter.value;
+    var players = document.querySelectorAll('.player');
+    timer = setInterval(countDown, 1000);
+
+    function countDown() {
+        var winner;
+        if (time == 0) {
+            clearInterval(timer);
+            players.forEach((val) => {
+                if (val.classList.contains('w3-red') === false) {
+                    winner = val.innerHTML;
+                    bigsq.forEach((val => val.classList.add(op)));
+                }
+            })
+            clockDisplay.innerHTML = `Congratulations ${winner}!!`;
+        } else {
+            time--;
+            clockDisplay.innerHTML = time;
+        }
+    }
+    return timer;
+}
+
+function stop() {
+    clearInterval(timer);
+    time = counter.value;
+    clockDisplay.innerHTML = time;
+}
+
+counter.addEventListener('click', stop);
+
+
+function play() {
+    // Identify element calling the function
     let x = event.target;
     let parent = x.parentElement.classList;
 
-    // Check if small square has been played in
+    // Stop current timer process
+    stop();
 
-    if (x.classList.contains(circle) || x.classList.contains(cross)) {
+    // Check if small square has been played in
+    if (x.classList.contains('p1') || x.classList.contains('p2')) {
         alert('This square has been played. Please play in another square');
         return;
     }
@@ -52,12 +89,12 @@ const play = () => {
 
     if (moves % 2 === 0) {
         moves = moves + 1;
-        newEl('i', '', 'far fa-circle flexCenter', x);
+        newEl('i', '', 'p1 fas fa-cat flexCenter', x);
         pl1.classList.remove('w3-red');
         pl2.classList.add('w3-red');
     } else {
         moves = moves + 1;
-        newEl('i', '', 'fas fa-times flexCenter', x);
+        newEl('i', '', 'p2 fas fa-dog flexCenter', x);
         pl1.classList.add('w3-red');
         pl2.classList.remove('w3-red');
     }
@@ -65,6 +102,7 @@ const play = () => {
     // Create opacity in big squares
 
     zone(x.id);
+    move();
 };
 
 // create small squares
@@ -80,13 +118,14 @@ let smlsq = wrapper.querySelectorAll('.small');
 
 let op = 'w3-opacity-max';
 
-const reset = () => {
-    smlsq.forEach(val => val.innerHTML = '');
+function reset() {
+    stop();
     moves = 0;
+    smlsq.forEach(val => val.innerHTML = '');
     pl1.classList.add('w3-red');
     pl2.classList.remove('w3-red');
     bigsq.forEach((val => val.classList.remove(op)));
-};
+}
 
 resetBtn.addEventListener('click', reset);
 

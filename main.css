@@ -18,7 +18,9 @@
 }
 
 body {
-    background-image: url("https://source.unsplash.com/featured/?animals")
+    background-image: url("https://source.unsplash.com/featured/?animals");
+    background-repeat: no-repeat;
+    background-size: cover
 }
 
 .borderLR {
@@ -39,5 +41,12 @@ body {
     height: 100%;
 }
  footer {
-     background-color: darkslategray
+     
+     display: flex;
+     align-items: center;
+     height: fit-content;
+ }
+
+ #counter {
+     width: 10%
  }

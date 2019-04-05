@@ -13,7 +13,19 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
 </head>
 
-<body id="body" class="w3-margin-top w3-padding-32">
+<body id="body" class="">
+    <header class="w3-center w3-padding-32">
+        <select id="counter" class="w3-button w3-white w3-border">
+            <option value="5">5 sec</option>
+            <option value="10">10 sec</option>
+            <option value="15">15 sec</option>
+            <option value="20">20 sec</option>
+            <option value="25">25 sec</option>
+            <option value="30">30 sec</option>
+        </select>
+        <h3 id="clock" class="w3-input w3-white">Counter</h3>
+
+    </header>
     <section id="wrapper" class="animated w3-content w3-card-4 grid">
         <div id="aa" class="big">
 
@@ -46,18 +58,18 @@
     <hr>
     <footer class="w3-row">
         <div class="w3-third w3-center">
-            <h2 id="pl1" class="w3-red w3-btn">Player 1:</h2><span id="p1score"></span>
+            <h2 id="pl1" class="player w3-red w3-btn">Player 1</h2><span id="p1score"></span>
         </div>
         <div class="w3-third w3-center">
             <button id="reset" class="w3-green w3-btn">Reset</button>
         </div>
         <div class="w3-third w3-center">
-            <h2 id="pl2" class="w3-btn">Player 2:</h2><span id="p2score"></span>
+            <h2 id="pl2" class="player w3-btn">Player 2</h2><span id="p2score"></span>
         </div>
     </footer>
 
 
-    <script src="main.js"></script>
+    <script src="bundle.js"></script>
 </body>
 
 </html>
