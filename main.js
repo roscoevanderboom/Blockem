@@ -14,10 +14,8 @@ const log = (x => console.log(x));
 
 // HTML Elements
 
-let wrapper = document.querySelector('#wrapper');
-let bigsq = wrapper.querySelectorAll('.big');
-let p1score = document.querySelector('#p1score');
-let p2score = document.querySelector('#p2score');
+let board = document.querySelector('#board');
+let bigsq = board.querySelectorAll('.big');
 let pl1 = document.querySelector('#pl1');
 let pl2 = document.querySelector('#pl2');
 let resetBtn = document.querySelector('#reset');
@@ -115,7 +113,7 @@ bigsq.forEach((val) => {
     val.classList.add('grid');
 });
 
-let smlsq = wrapper.querySelectorAll('.small');
+let smlsq = board.querySelectorAll('.small');
 
 let op = 'w3-opacity-max';
 
@@ -128,9 +126,13 @@ function reset() {
     bigsq.forEach((val => val.classList.remove(op)));
 }
 
+// Add event listeners
+
 resetBtn.addEventListener('click', reset);
 
 smlsq.forEach(val => val.addEventListener('click', play));
+
+// Create opacity on big squares
 
 function zone(id) {
     let n = id.slice(2);

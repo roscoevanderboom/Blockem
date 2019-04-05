@@ -14,59 +14,41 @@
 </head>
 
 <body id="body" class="">
-    <header class="w3-center w3-padding-32">
-        <select id="counter" class="w3-button w3-white w3-border">
-            <option value="5">5 sec</option>
-            <option value="10">10 sec</option>
-            <option value="15">15 sec</option>
-            <option value="20">20 sec</option>
-            <option value="25">25 sec</option>
-            <option value="30">30 sec</option>
-        </select>
-        <h3 id="clock" class="w3-input w3-white">Counter</h3>
+    <div id='wrapper' class="">
+        <header class="w3-center">
+            <div id="topBar">
+                <select id="counter" class="w3-button w3-bar-item w3-white w3-border">
+                    <option value="5">5 sec</option>
+                    <option value="10">10 sec</option>
+                    <option value="15">15 sec</option>
+                    <option value="20">20 sec</option>
+                    <option value="25">25 sec</option>
+                    <option value="30">30 sec</option>
+                </select>
+                <button id="reset" class="w3-green w3-btn w3-bar-item">Reset</button>
+            </div>
 
-    </header>
-    <section id="wrapper" class="animated w3-content w3-card-4 grid">
-        <div id="aa" class="big">
+            <h3 id="clock" class="w3-white w3-content">Set timer</h3>
+        </header>
+        <section id="board" class="animated w3-card-4 grid">
+            <div id="aa" class="big"></div>
+            <div id="ab" class="big borderLR"></div>
+            <div id="ac" class="big"></div>
+            <div id="ba" class="big borderTB"></div>
+            <div id="bb" class="big borderLR borderTB"></div>
+            <div id="bc" class="big borderTB"></div>
+            <div id="ca" class="big"></div>
+            <div id="cb" class="big borderLR"></div>
+            <div id="cc" class="big"></div>
+        </section>
 
-        </div>
-        <div id="ab" class="big borderLR">
+        <footer class="">
+            <button id="pl1" class="player w3-red w3-button">Player 1</button>
 
-        </div>
-        <div id="ac" class="big">
+            <button id="pl2" class="player w3-button">Player 2</button>
+        </footer>
+    </div>
 
-        </div>
-        <div id="ba" class="big borderTB">
-
-        </div>
-        <div id="bb" class="big borderLR borderTB">
-
-        </div>
-        <div id="bc" class="big borderTB">
-
-        </div>
-        <div id="ca" class="big">
-
-        </div>
-        <div id="cb" class="big borderLR">
-
-        </div>
-        <div id="cc" class="big">
-
-        </div>
-    </section>
-    <hr>
-    <footer class="w3-row">
-        <div class="w3-third w3-center">
-            <h2 id="pl1" class="player w3-red w3-btn">Player 1</h2><span id="p1score"></span>
-        </div>
-        <div class="w3-third w3-center">
-            <button id="reset" class="w3-green w3-btn">Reset</button>
-        </div>
-        <div class="w3-third w3-center">
-            <h2 id="pl2" class="player w3-btn">Player 2</h2><span id="p2score"></span>
-        </div>
-    </footer>
 
 
     <script src="main.js"></script>
