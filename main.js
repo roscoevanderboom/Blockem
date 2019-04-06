@@ -15,7 +15,9 @@ const log = (x => console.log(x));
 // HTML Elements
 
 let board = document.querySelector('#board');
+let playerSelectHeader = document.querySelector('#playerSelectHeader');
 let bigsq = board.querySelectorAll('.big');
+let tokens = document.querySelectorAll('.token');
 let pl1 = document.querySelector('#pl1');
 let pl2 = document.querySelector('#pl2');
 let resetBtn = document.querySelector('#reset');
@@ -26,8 +28,34 @@ let clockDisplay = document.querySelector('#clock');
 let moves = 0;
 var timer;
 var winner;
+var p1token;
+var p2token;
+let y = 0;
+
+// Open Token select modal
+document.body.addEventListener('load',w3.show('#playerSelect'));
+
 
 // Game Functions
+
+function selectToken() {
+    let x = event.target.innerHTML;
+
+    if (y === 0) {
+        p1token = x;
+        playerSelectHeader.innerHTML = 'Player 2 select';
+    }
+    if (y === 1) {        
+        p2token = x;
+        y = 0;
+        w3.hide('#playerSelect');
+        playerSelectHeader.innerHTML = 'Player 1 select';
+    }
+    
+    y++;
+    log(x);
+
+}
 
 function startTimer() {
     var time = counter.value;
@@ -35,7 +63,7 @@ function startTimer() {
     timer = setInterval(countDown, 1000);
 
     function countDown() {
-        
+
         if (time == 0) {
             clearInterval(timer);
             players.forEach((val) => {
@@ -58,9 +86,6 @@ function stopTimer() {
     time = counter.value;
     clockDisplay.innerHTML = time;
 }
-
-counter.addEventListener('click', stopTimer);
-
 
 function play() {
     // Identify element calling the function
@@ -85,12 +110,14 @@ function play() {
     // Also add classes to player headings
     if (moves % 2 === 0) {
         moves = moves + 1;
-        newEl('i', '', 'p1 cat flexCenter', x);
+        newEl('div', '', 'p1 move', x);
+        el.innerText = p1token;
         pl1.classList.remove('w3-red');
         pl2.classList.add('w3-red');
     } else {
         moves = moves + 1;
-        newEl('i', '', 'p2 dog flexCenter', x);
+        newEl('div', '', 'p2 move', x);
+        el.innerText = p2token;
         pl1.classList.add('w3-red');
         pl2.classList.remove('w3-red');
     }
@@ -126,12 +153,6 @@ function reset() {
     bigsq.forEach((val => val.classList.remove(op)));
 }
 
-// Add event listeners
-
-resetBtn.addEventListener('click', reset);
-
-smlsq.forEach(val => val.addEventListener('click', play));
-
 // Create opacity on big squares
 
 function zone(id) {
@@ -144,3 +165,12 @@ function zone(id) {
         }
     }
 }
+
+// Add event listeners
+
+counter.addEventListener('click', stopTimer);
+
+resetBtn.addEventListener('click', reset);
+
+smlsq.forEach(val => val.addEventListener('click', play));
+tokens.forEach(val => val.addEventListener('click', selectToken));
