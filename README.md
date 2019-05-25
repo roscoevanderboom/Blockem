@@ -1,5 +1,5 @@
 # Animal-Farm
-Another project to practice Javascript.
+Another project to practice Javascript. I managed to get the main functionality of the game working. Now I offer it to the community and anyone is welcome to clone, fork or improve the project in any way they wish. 
 
 <h3>About the Game</h3>
 
