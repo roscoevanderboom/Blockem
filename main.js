@@ -23,6 +23,7 @@ let clockDisplay = document.querySelector('#clock');
 
 // Game Variables
 let moves = 0;
+var time;
 var timer;
 var winner;
 var p1token;
@@ -62,33 +63,30 @@ function findWinner() {
     return winner;
 }
 
-// function startTimer() {
-//     var time = counter.value; 
-//     let timer = setInterval(() => {
-//         countDown()
-//     }, 1000);
+function startTimer() {
+    time = counter.value;
+    timer = setInterval(countDown, 1000);
 
-//     let timer = setInterval(countDown, 1000);
+    function countDown() {
+        if (time === 0 ) {            
+            let winner = findWinner()
+            winningModal.style.display = 'block'
+            winningModalTitle.textContent = `Congratulations ${winner}!!`;
+            resetTimer(timer);
+        } else {
+            time--;
+            clockDisplay.innerHTML = time;
+        }
+    }
+    return timer;
+}
 
-//     function countDown() {
-//         if (time === 0) {
-//             resetTimer(timer) 
-//             let winner = findWinner()
-//             winningModal.style.display = 'block'
-//             winningModalTitle.textContent = `Congratulations ${winner}!!`;
-//         } else {
-//             time--;
-//             clockDisplay.innerHTML = time;
-//         }
-//     }
-//     return timer;
-// }
 
-// function resetTimer(timer) {
-//     clearInterval(timer);
-//     time = counter.value;
-//     clockDisplay.innerHTML = time;
-// }
+function resetTimer(timer) {
+    clearInterval(timer);
+    time = counter.value;
+    clockDisplay.innerHTML = time;
+}
 
 
 function isUniform(arr) {
@@ -105,7 +103,7 @@ function isUniform(arr) {
     }
 }
 
-function threeInaRow(par) {
+function threeInaRow(par,timer) {
     let top = [0, 1, 2, ]
     let middle = [3, 4, 5, ]
     let bottom = [6, 7, 8, ]
@@ -128,12 +126,12 @@ function threeInaRow(par) {
                 console.log(text[val])
             }
         })
-        
-        if (isUniform(values)) {
-            // resetTimer()
+
+        if (isUniform(values)) {           
             let winner = findWinner()
             winningModal.style.display = 'block'
             winningModalTitle.textContent = `Congratulations ${winner}!!`;
+            resetTimer(timer);
         }
     }
 }
@@ -173,8 +171,8 @@ function play() {
 
     threeInaRow(par, x)
     // Stop current timer process
-    // resetTimer();
-    // startTimer();
+    resetTimer(timer)
+    timer = startTimer();
 
     // Create opacity in big squares
     zone(x.id);
@@ -194,7 +192,7 @@ let smlsq = board.querySelectorAll('.small');
 let op = 'w3-opacity-max';
 
 function reset() {
-    // stopTimer();
+    resetTimer(timer)
     moves = 0;
     smlsq.forEach(val => val.innerHTML = '');
     pl1.classList.add('w3-red');
