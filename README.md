@@ -1,6 +1,6 @@
 # Animal-Farm
 Another project to practice Javascript.
-https://mios-v1.firebaseapp.com/projects/tictactoe/index.html
+https://mios-v1.firebaseapp.com/projects/Animal-Farm/index.html
 
 <h3>About the Game</h3>
 
