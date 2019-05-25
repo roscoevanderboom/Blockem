@@ -10,6 +10,24 @@ body {
     text-align: -webkit-center;
 }
 
+#modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#winningModalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: -moz-fit-content;    
+}
+
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 #board {
     background-color: azure;
     border-style: groove;
@@ -36,6 +54,10 @@ body {
 
 footer {
     margin: 10px
+}
+
+.small {
+    font-size: 2.6em;
 }
 
 .move {
@@ -68,16 +90,6 @@ footer {
 .borderTB {
     border-top: 2px solid rgb(255, 0, 0);
     border-bottom: 2px solid rgb(255, 0, 0);
-}
-
-.cat {
-    background-image: url('http://chittagongit.com//images/cat-icon-png/cat-icon-png-2.jpg');
-    background-size: cover;
-}
-
-.dog {
-    background-image: url('http://www.newdesignfile.com/postpic/2010/12/free-dog-icons_337083.png');
-    background-size: cover;
 }
 
 @media only screen and (max-width: 600px) {

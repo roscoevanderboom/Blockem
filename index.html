@@ -10,13 +10,21 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
 </head>
 
 <body id="body" class="">
     <div id='wrapper' class="">
+        <div id="winningModal" class="w3-modal">
+            <div id="winningModalContent" class="w3-modal-content w3-padding w3-container">
+                <h1 id="winningModalTitle" class="animated tada"></h1>
+                <button id="reset" class="w3-green w3-btn w3-bar-item">Reset</button>
+            </div>
+        </div>
         <div id="playerSelect" class="w3-modal">
-            <div class="w3-content">
+            <div id="modalContent" class="w3-content">
                 <h3 id="playerSelectHeader" class="w3-tag w3-padding w3-round-large">Player 1 select</h3>
                 <div id="tokens" class="w3-tag w3-padding w3-round-large">
                     <div class="token">🦊</div>
@@ -44,10 +52,8 @@
                     <option value="20">20 sec</option>
                     <option value="25">25 sec</option>
                     <option value="30">30 sec</option>
-                </select>
-                <button id="reset" class="w3-green w3-btn w3-bar-item">Reset</button>
+                </select>                
             </div>
-
             <h3 id="clock" class="w3-white w3-content">Set timer</h3>
         </header>
         <section id="board" class="animated w3-card-4 grid">
@@ -64,12 +70,9 @@
 
         <footer class="">
             <button id="pl1" class="player w3-red w3-button">Player 1</button>
-
             <button id="pl2" class="player w3-button">Player 2</button>
         </footer>
     </div>
-
-
 
     <script src="main.js"></script>
 </body>

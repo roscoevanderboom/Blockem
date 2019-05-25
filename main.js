@@ -9,9 +9,6 @@ const newEl = (tag, id = '', cl = '', par = document.body) => {
     par.appendChild(el);
     return el;
 };
-
-const log = (x => console.log(x));
-
 // HTML Elements
 
 let board = document.querySelector('#board');
@@ -33,79 +30,131 @@ var p2token;
 let y = 0;
 
 // Open Token select modal
-document.body.addEventListener('load',w3.show('#playerSelect'));
+document.body.addEventListener('load', w3.show('#playerSelect'));
 
 
 // Game Functions
 
 function selectToken() {
     let x = event.target.innerHTML;
-
     if (y === 0) {
         p1token = x;
         playerSelectHeader.innerHTML = 'Player 2 select';
     }
-    if (y === 1) {        
+    if (y === 1) {
         p2token = x;
         y = 0;
         w3.hide('#playerSelect');
         playerSelectHeader.innerHTML = 'Player 1 select';
     }
-    
     y++;
-    log(x);
-
 }
 
-function startTimer() {
-    var time = counter.value;
+function findWinner() {
     var players = document.querySelectorAll('.player');
-    timer = setInterval(countDown, 1000);
+    let winner;
+    players.forEach((val) => {
+        if (val.classList.contains('w3-red') === false) {
+            winner = val.innerHTML;
+            bigsq.forEach((val => val.classList.add(op)));
+        }
+    })
+    return winner;
+}
 
-    function countDown() {
+// function startTimer() {
+//     var time = counter.value; 
+//     let timer = setInterval(() => {
+//         countDown()
+//     }, 1000);
 
-        if (time == 0) {
-            clearInterval(timer);
-            players.forEach((val) => {
-                if (val.classList.contains('w3-red') === false) {
-                    winner = val.innerHTML;
-                    bigsq.forEach((val => val.classList.add(op)));
-                }
-            })
-            clockDisplay.innerHTML = `Congratulations ${winner}!!`;
-        } else {
-            time--;
-            clockDisplay.innerHTML = time;
+//     let timer = setInterval(countDown, 1000);
+
+//     function countDown() {
+//         if (time === 0) {
+//             resetTimer(timer) 
+//             let winner = findWinner()
+//             winningModal.style.display = 'block'
+//             winningModalTitle.textContent = `Congratulations ${winner}!!`;
+//         } else {
+//             time--;
+//             clockDisplay.innerHTML = time;
+//         }
+//     }
+//     return timer;
+// }
+
+// function resetTimer(timer) {
+//     clearInterval(timer);
+//     time = counter.value;
+//     clockDisplay.innerHTML = time;
+// }
+
+
+function isUniform(arr) {
+    let y = arr[0];
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] !== y || arr[i] === '' || arr.length < 3) {
+            console.log('This array is not uniform or empty ' + arr);
+            console.log('Array lenght ' + arr.length)
+            return false;
+        }
+        console.log('This array is uniform ' + arr);
+        console.log('Array lenght ' + arr.length);
+        return true;
+    }
+}
+
+function threeInaRow(par) {
+    let top = [0, 1, 2, ]
+    let middle = [3, 4, 5, ]
+    let bottom = [6, 7, 8, ]
+    let x1 = [0, 4, 8, ]
+    let x2 = [2, 4, 6, ]
+    let left = [0, 3, 6, ]
+    let center = [1, 4, 7, ]
+    let right = [2, 5, 8, ]
+
+    let rows = [top, middle, bottom, x1, x2, left, center, right];
+
+    let text = []
+    par.childNodes.forEach(val => text.push(val.textContent))
+
+    for (let i = 0; i < rows.length; i++) {
+        let values = []
+        rows[i].forEach((val) => {
+            if (text[val] !== '') {
+                values.push(text[val])
+                console.log(text[val])
+            }
+        })
+        
+        if (isUniform(values)) {
+            // resetTimer()
+            let winner = findWinner()
+            winningModal.style.display = 'block'
+            winningModalTitle.textContent = `Congratulations ${winner}!!`;
         }
     }
-    return timer;
-}
-
-function stopTimer() {
-    clearInterval(timer);
-    time = counter.value;
-    clockDisplay.innerHTML = time;
 }
 
 function play() {
     // Identify element calling the function
     let x = event.target;
+    let par = x.parentElement
     let parent = x.parentElement.classList;
-
     //  Check if move is valid
     // Check if small square has been played in
     if (x.classList.contains('p1') || x.classList.contains('p2')) {
         clockDisplay.innerHTML = 'This square has been played.';
         return;
     }
-
     // Check if big square is available
 
     if (parent.contains('w3-opacity-max')) {
         clockDisplay.innerHTML = 'You may not play in this box.';
         return;
     }
-
     // Check to see whose turn is it and increment the counter ( moves )
     // Also add classes to player headings
     if (moves % 2 === 0) {
@@ -122,13 +171,13 @@ function play() {
         pl2.classList.remove('w3-red');
     }
 
+    threeInaRow(par, x)
     // Stop current timer process
-    stopTimer();
-    startTimer();
+    // resetTimer();
+    // startTimer();
 
     // Create opacity in big squares
     zone(x.id);
-
 }
 
 // create small squares
@@ -145,12 +194,13 @@ let smlsq = board.querySelectorAll('.small');
 let op = 'w3-opacity-max';
 
 function reset() {
-    stopTimer();
+    // stopTimer();
     moves = 0;
     smlsq.forEach(val => val.innerHTML = '');
     pl1.classList.add('w3-red');
     pl2.classList.remove('w3-red');
     bigsq.forEach((val => val.classList.remove(op)));
+    winningModal.style.display = 'none'
 }
 
 // Create opacity on big squares
@@ -168,7 +218,7 @@ function zone(id) {
 
 // Add event listeners
 
-counter.addEventListener('click', stopTimer);
+// counter.addEventListener('click', resetTimer);
 
 resetBtn.addEventListener('click', reset);
 
