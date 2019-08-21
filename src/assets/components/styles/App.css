@@ -1,0 +1,149 @@
+/* 
+
+*/
+.App {
+  background-image: url('https://mdbootstrap.com/img/Photos/Others/gradient1.jpg');
+  /* background-image: url('https://source.unsplash.com/featured/?animals'); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+
+.fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.5s linear 1s, opacity 0.5s;
+}
+
+.fadeIn {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0.5s linear 0s, opacity 0.5s;
+
+}
+
+/* Navbar */
+
+.brand {
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-family: cursive;
+}
+
+.brand:hover {
+  background-color: #465f88;
+}
+
+.nav-link {
+  font-weight: 500;
+  width: fit-content;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+  background-color: #465f88;
+  border-radius: 10px;
+}
+
+/* AvatarSelectModal */
+
+#AvatarSelectModal {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: -webkit-fill-available;
+}
+
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-content {
+  max-width: 500px;
+}
+
+.modal-header {
+  border-bottom: none
+}
+
+.modal-body {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  font-size: xx-large
+}
+
+.modal-footer {
+  justify-content: center;
+  border-top: none
+}
+
+.token {
+  padding: 5px
+}
+
+.token:hover {
+  cursor: pointer;
+  background-color: #465f88;
+  border-radius: 8px;
+}
+
+/* AvatarSelectModal */
+
+
+#AvatarIcon {
+  font-size: xx-large
+}
+
+#boardModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board {
+  background-color: azure;
+  border-style: groove;
+  border-width: 25px;
+  border-color: chocolate;
+  max-width: 600px;
+  max-height: 600px;
+  width: 100vw;
+  height: 100vh;
+  
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.largeSquare {
+  
+}
+
+.smallSquare {
+  border: 1px solid black;
+}
+
+
+
+/* .borderLR {
+  border-left: 2px solid rgb(255, 0, 0);
+  ;
+  border-right: 2px solid rgb(255, 0, 0);
+  ;
+}
+
+.borderTB {
+  border-top: 2px solid rgb(255, 0, 0);
+  border-bottom: 2px solid rgb(255, 0, 0); */
+/* } */

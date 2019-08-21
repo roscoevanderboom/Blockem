@@ -1,26 +1,68 @@
-# Animal-Farm
-Another project to practice Javascript. I managed to get the main functionality of the game working. Now I offer it to the community and anyone is welcome to clone, fork or improve the project in any way they wish. 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Available Scripts
 
-<h3>Notice! Main Bug:</h3>
+In the project directory, you can run:
 
-<p>The three-in-a-row function works ( based on reading 8 preset array arrangements ), though there are occasions when a player will be awarded a win, even though the array inputs are not uniform. I've been trying to figure out why this happens. 
-</p>
+### `npm start`
 
-<h3>About the Game</h3>
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-<p>This is an adaptation of the famous TIC-TAC-TOE game. Currently the game can be played by 2 players sitting at the same computer. One of the main goals is to build a database/backend for the app to allow players from around the world to play against each other. Further extensions could include user profiles, rankings, and other multiplayer functions. 
-</p>
-<p>The board consists of a large grid with 9 squares ( traditional TicTacToe ) with nested grids of the same design.
-    The player name will be highlighted on their turn to play. There is a timer to that runs down and resets with 
-    every turn.
-</p>
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-<h3>How to play</h3>
-<p>First select your avatar. Then, player 1 starts the game. Every time you click, you not only place your token, you also designate where your opponent will play. The game ends when the timer runs, you have not been able to move or someone has scored 3-in-a-row.
-</p>
+### `npm test`
 
-<h3>Contributing</h3>
-<p>
-    Please go to the issues section to view issues you might want to help with. This project could use a lot of CSS luv!!
-</p>
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+
+### Analyzing the Bundle Size
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
