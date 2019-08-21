@@ -22,5 +22,5 @@ Another project to practice Javascript. I managed to get the main functionality 
 
 <h3>Contributing</h3>
 <p>
-    Pleade go to the issues section to view issues you might want to help with. This project could use a lot of CSS luv!!
+    Please go to the issues section to view issues you might want to help with. This project could use a lot of CSS luv!!
 </p>
