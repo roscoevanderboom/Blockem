@@ -83,7 +83,7 @@ function Board({ props }) {
                         {bigSquares.map((val, i) =>
                             <LargeSquare key={i} id={val} props={LargeSquareProps} />)}
                     </section>
-                    {playerToMove}
+                    {`Next player: ${playerToMove}`}
                     <button type="button" className="btn btn-primary" onClick={leaveRoom}>Leave room</button>
 
                 </div>

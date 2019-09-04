@@ -37,7 +37,7 @@ function AvatarSelect({ props }) {
             return;
         }
         //  Join random room      
-        // console.log(hostedRooms[0].Host)
+        
         firestore.playerList.doc(player.id)
             .update({
                 ready: true,
@@ -52,7 +52,7 @@ function AvatarSelect({ props }) {
                             id: player.id,
                             ready: true,
                         },                        
-                        PlayerToMove: player.id
+                        PlayerToMove: player.token[0]
                     })
             })
             .catch(function (error) {

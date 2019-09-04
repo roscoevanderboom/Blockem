@@ -44,7 +44,7 @@ function LargeSquare({ props, id }) {
 
     const play = (square) => {
         let parent = square.parentElement;
-        if (!(canIPlayHere(square, parent)) || gameRoom.PlayerToMove !== player.id) {
+        if (!(canIPlayHere(square, parent)) || gameRoom.PlayerToMove !== player.token[0]) {
             alert(`Sorry. That move is not allowed`)
             return;
         }
@@ -60,7 +60,7 @@ function LargeSquare({ props, id }) {
         square.textContent = player.token[0];
 
         firestore.gameRooms.doc(gameRoom.ID).update({
-            PlayerToMove: opponent.id,
+            PlayerToMove: opponent.token[0],
             SquaresPlayed: moves,
             NextSquare: square.id.slice(square.id.indexOf('-') + 1)
         })
