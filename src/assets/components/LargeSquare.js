@@ -34,8 +34,7 @@ function LargeSquare({ props, id }) {
     }
 
     const canIPlayHere = (square, parent) => {
-        let result = true;
-        console.log(parent.classList)
+        let result = true;       
         if (parent.classList.value.includes('restricted') || square.textContent !== '') {
             result = false;
             return;

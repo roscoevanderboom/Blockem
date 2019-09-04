@@ -30,19 +30,19 @@ function Board({ props }) {
     ]
 
     const setTheBoard = () => {
-        
-        bigSquares.forEach((sq) => {
-            if (sq === gameRoom.NextSquare) {
-                document.getElementById(gameRoom.NextSquare).classList.remove('restricted');
-                return;                
-            }
-            document.getElementById(sq).classList.add('restricted');
-        })
-
-        gameRoom.SquaresPlayed.forEach(val => {
-            let playedSQ = document.getElementById(val.square);
-            playedSQ.textContent = val.token;
-        });
+        if (gameRoom.NextSquare !== 'Any') {
+            bigSquares.forEach((sq) => {
+                if (sq === gameRoom.NextSquare) {
+                    document.getElementById(gameRoom.NextSquare).classList.remove('restricted');
+                    return;                
+                }
+                document.getElementById(sq).classList.add('restricted');
+            });
+            gameRoom.SquaresPlayed.forEach(val => {
+                let playedSQ = document.getElementById(val.square);
+                playedSQ.textContent = val.token;
+            });           
+        }        
     }
 
     const leaveRoom = () => {
