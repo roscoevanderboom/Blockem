@@ -18,10 +18,7 @@ function WaitingRoom({ props }) {
                     ready: true
                 },
                 GameOn: true
-            })
-            .then(()=>{
-                functions.setGameOn(true);
-            })           
+            })                      
             return;
         }
         alert('No guest. Please wait')

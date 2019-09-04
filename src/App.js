@@ -33,10 +33,9 @@ const anonUser = () => {
 
 function App() {
     const [player, setPlayer] = useState(false);
-    const [opponent, setOpponent] = useState(false);   
-    const [gameOn, setGameOn] = useState(false)
+    const [opponent, setOpponent] = useState(false);
     const [hostedRooms, setHostedRooms] = useState([]);
-    const [gameRoom, setGameRoom] = useState(false)
+    const [gameRoom, setGameRoom] = useState(false);
 
 
     // Set current user/player
@@ -91,7 +90,7 @@ function App() {
                 setPlayer(doc.data());
             });
     }
-  
+
     // Room functions
     const getRooms = () => {
         gameRooms.get().then(function (querySnapshot) {
@@ -107,19 +106,16 @@ function App() {
     }
     const watchRoom = (id) => {
         gameRooms.doc(id)
-            .onSnapshot(function (doc) {                   
-                if (doc.data() && doc.data().Host !== undefined) {                     
+            .onSnapshot(function (doc) {
+                if (doc.data() && doc.data().Host !== undefined) {
                     if (doc.data().Host.id === player.id) {
                         setGameRoom(doc.data());
                         setOpponent(doc.data().Guest)
-                    }      
+                    }
                     if (doc.data().Guest.id === player.id) {
                         setGameRoom(doc.data());
                         setOpponent(doc.data().Host)
-                    }                                  
-                    if (doc.data().gameOn) {
-                        console.log('gameOn')
-                    }                                  
+                    }                    
                     return;
                 }
                 playerList.doc(player.id)
@@ -127,16 +123,16 @@ function App() {
                         ready: false,
                         inRoom: false
                     })
-                    .then(() => {                        
+                    .then(() => {
                         setGameRoom(false)
                         setOpponent(false)
-                        setGameOn(false)
                     })
             });
     }
-    const isPlayerReady = (id, ready, inRoom) => {
-        playerList.doc(id).update({ ready: ready, inRoom: inRoom })
-    }
+    // const isPlayerReady = (id, ready, inRoom) => {
+    //     playerList.doc(id).update({ ready: ready, inRoom: inRoom })
+    // }
+
 
     // Render functions
     useEffect(() => {
@@ -154,7 +150,7 @@ function App() {
             functions: {
                 getRooms: getRooms,
                 watchRoom: watchRoom,
-                setOpponent: setOpponent,                
+                setOpponent: setOpponent,
             },
             firestore: {
                 playerList: playerList,
@@ -164,16 +160,13 @@ function App() {
         WaitingRoom: {
             state: {
                 player: player,
-                opponent: opponent,               
+                opponent: opponent,
                 gameRoom: gameRoom
             },
             functions: {
                 watchRoom: watchRoom,
-                isPlayerReady: isPlayerReady,
-                setGameOn: setGameOn,               
             },
             firestore: {
-                playerList: playerList,
                 gameRooms: gameRooms
             }
         },
@@ -188,34 +181,38 @@ function App() {
                 gameRooms: gameRooms
             },
             functions: {
-                isPlayerReady: isPlayerReady
+
             },
 
         }
-    }   
+    }
 
-    const Display = () => {
-        if (!(player)) {           
+    const Route = () => {
+        // Loading screen
+        if (!(player)) {
             return (
                 <React.Fragment>
                     Loading...
                 </React.Fragment>
             );
         }
-        if (!(player.inRoom)) {              
+        // Player is not in a room. Go to Avartar Select Modal
+        if (!(player.inRoom)) {
             return (
                 <React.Fragment>
                     <AvatarSelect props={props.AvatarSelect} />
                 </React.Fragment>
             );
         }
-        if (player.inRoom && !(gameRoom.GameOn)) {                                  
+        // Player is ready and waiting
+        if (player.inRoom && !(gameRoom.GameOn)) {
             return (
                 <React.Fragment>
                     <WaitingRoom props={props.WaitingRoom} />
                 </React.Fragment>
             );
         }
+        // Player and opponent are ready. Game on!!
         if (player.inRoom && gameRoom.GameOn) {
             return (
                 <React.Fragment>
@@ -227,7 +224,7 @@ function App() {
 
     return (
         <div className="App">
-            {Display()}
+            {Route()}
         </div>
     );
 }

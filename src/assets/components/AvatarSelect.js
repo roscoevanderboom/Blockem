@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 // import firebase from '../firebase/Settings'
 import tokens from './tokens/Tokens'
@@ -78,6 +78,7 @@ function AvatarSelect({ props }) {
             Guest: false,
             ID: player.id,
             PlayerToMove: null,
+            NextSquare: 'Any',
             SquaresPlayed: []
         }
 
@@ -105,7 +106,7 @@ function AvatarSelect({ props }) {
                                 {!(player.token) ? `Select your avatar` :
                                     `Good luck ${player.token[2]} ${player.token[0]}`}
                             </h5>
-                            <span>{hostedRooms.length} hosted and open</span>
+                            <span>{hostedRooms.length} Rooms</span>
                         </div>
                         <div className="modal-body">
                             {tokens.map((token, key) =>

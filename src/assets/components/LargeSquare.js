@@ -1,95 +1,84 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Constants
 import Combos from '../constants/Combos'
-import updateArray from '../constants/UpdateArray'
 
 function LargeSquare({ props, id }) {
 
-    const { state, firestore, board } = props;
+    const { state, firestore, bigSquares } = props;
     const { gameRoom, player, opponent } = state;
-    const { lg, sm } = board;
 
-    let squaresPlayed = [];
 
-    const squares = [1, 2, 3, 4, 5, 6, 7, 8, 9,]
+    const squares = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-    const checkThreeInARow = (sq, num) => {
-        let values = [];
-        console.log(sq[0].parentElement);
+    const checkThreeInARow = (parent, square) => {
+        let currentSquare = square.id.slice(0, -1)
+        let text = [];
 
-        Combos.forEach(combo => {
-            // console.log(combo);
-            // console.log(num)
-        })
+        parent.childNodes.forEach(val => text.push(val.textContent));
+        // Combos.forEach(combo => {
+        //     let values = []
+        //     combo.forEach(val => {
+        //         if (text[val] !== '') {
+        //             values.push(text[val])
+        //             return;
+        //         }
+        //     });
 
-        // if (sq[num - 1].textContent === sq[num].textContent && sq[num].textContent === sq[num + 1].textContent) {
-        //     console.log('Matched' + sq[num - 1].id + ', ' + sq[num].id + ', ' + sq[num + 1].id)
-        //     sq[num - 1].style.backgroundColor = 'red';
-        //     sq[num].style.backgroundColor = 'red';
-        //     sq[num + 1].style.backgroundColor = 'red';
-        // }
-    }
-    const checkForWinner = (sq) => {
-        // let arr = arrayOfNumbers(82);
-        // let squaresPlayed = [];
-        // arr.forEach(num => {           
-        //     if (sq[num - 1].textContent !== '') {
-        //         console.log(sq[num - 1].id + ': '+ sq[num - 1].textContent);
-        //         squaresPlayed.push(sq[num - 1]);
-        //         // checkThreeInARow(sq, num)
-        //     }
-        // })
-
-        // div.forEach((sq, i) => {
-        //     if (token[i] === token[i + 1] && token[i + 1] === token[i + 2]) {
-        //         console.log('Three in a row');
+        //     if (values.length > 0 && values[0] === values[1] && values[1] === values[2]) {
+        //         console.log(values);
+        //         console.log(currentSquare);
         //         return;
         //     }
         // })
-
     }
 
-    const canIPlayHere = (square) => {
-        let result;
-        square.textContent !== '' ? result = false : result = true;
+    const canIPlayHere = (square, parent) => {
+        let result = true;
+        console.log(parent.classList)
+        if (parent.classList.value.includes('restricted') || square.textContent !== '') {
+            result = false;
+            return;
+        }
         return result
     }
 
     const play = (square) => {
-        
-        if (!(canIPlayHere(square)) || gameRoom.PlayerToMove !== player.id) {
+        let parent = square.parentElement;
+        if (!(canIPlayHere(square, parent)) || gameRoom.PlayerToMove !== player.id) {
             alert(`Sorry. That move is not allowed`)
             return;
         }
-        let moves = squaresPlayed;
-        let cls = square.classList.value.slice(0, 3)
-        let parent = square.parentElement;
-        let children = parent.getElementsByClassName('smallSquare')
-        let sqID = parent.id + '-' + cls;
+        let moves = gameRoom.SquaresPlayed;
 
-        updateArray(squaresPlayed, sqID)
-        
-            
-        // firestore.gameRooms.doc(gameRoom.ID).update({
-        //     PlayerToMove: opponent.id,
-        //     [sqID]: {
-        //         played: true,
-        //         player: player.id,
-        //         token: player.token[0]
-        //     }
-        // });
+        let newMove = {
+            player: player.id,
+            token: player.token[0],
+            square: square.id
+        }
+
+        moves.push(newMove);
+        square.textContent = player.token[0];
+
+        firestore.gameRooms.doc(gameRoom.ID).update({
+            PlayerToMove: opponent.id,
+            SquaresPlayed: moves,
+            NextSquare: square.id.slice(square.id.indexOf('-') + 1)
+        })
+        checkThreeInARow(parent, square)
     }
 
-    console.log(lg);
-    console.log(sm);
+    useEffect(() => {
+
+    })
+
+
     return (
         <React.Fragment>
             <section id={id} className="grid largeSquare">
-                {squares.map(val =>
-                    <div key={val} className={`sm${val} smallSquare`} onClick={(e) => {
-                        if( !e ) e = window.event; 
-                       
+                {bigSquares.map(val =>
+                    <div key={val} id={`${id}-${val}`} className={`smallSquare`} onClick={(e) => {
+                        if (!e) e = window.event;
                         play(e.target)
                     }}></div>)}
             </section>

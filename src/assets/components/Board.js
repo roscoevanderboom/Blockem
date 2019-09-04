@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 // Components
 import LargeSquare from './LargeSquare'
@@ -16,31 +16,35 @@ function Board({ props }) {
     let hostIcon = 'Host';
     let guestIcon = 'Guest';
     let playerToMove = '';
-    // let squaresPlayed = [];
 
-    const arrayOfNumbers = (number) => {
-        let array = [];
-        for (let i = 1; i < number; i++) {
-            array.push(i)
-        }
-        return array;
+    const bigSquares = [
+        'TopLeft',
+        'TopCenter',
+        'TopRight',
+        'MiddleLeft',
+        'MiddleCenter',
+        'MiddleRight',
+        'BottomLeft',
+        'BottomCenter',
+        'BottomRight',
+    ]
+
+    const setTheBoard = () => {
+        
+        bigSquares.forEach((sq) => {
+            if (sq === gameRoom.NextSquare) {
+                document.getElementById(gameRoom.NextSquare).classList.remove('restricted');
+                return;                
+            }
+            document.getElementById(sq).classList.add('restricted');
+        })
+
+        gameRoom.SquaresPlayed.forEach(val => {
+            let playedSQ = document.getElementById(val.square);
+            playedSQ.textContent = val.token;
+        });
     }
 
-    const setTheBoard = (sqPlayed) => {
-        let lg = document.getElementsByClassName('largeSquare');
-        let sq = lg.getElementsByClassName('smallSquare');
-
-        // if (sq !== undefined) {
-        //     let div = sqPlayed.map(sq => sq.id);
-        //     // let player = sqPlayed.map(pl => pl.player);
-        //     let token = sqPlayed.map(to => to.token);
-
-        //     div.forEach((id, i) => {
-        //         let index = id.slice(2)
-        //         sq[index - 1].textContent = token[i];
-        //     });
-        // }
-    }
     const leaveRoom = () => {
         firestore.gameRooms.doc(gameRoom.ID).set({
             Available: false
@@ -48,53 +52,36 @@ function Board({ props }) {
     }
 
     useEffect(() => {
-
+        setTheBoard()
     })
-
 
     const LargeSquareProps = {
         state: state,
-        board: {
-            // lg: largeSQ,
-            // sm: smallSQ,
-        },
-        firestore: firestore
-    }
-
-    if (!(gameRoom)) {
-        return (
-            <React.Fragment>
-                Loading...
-            </React.Fragment>
-        );
+        firestore: firestore,
+        bigSquares: bigSquares
     }
 
     if (gameRoom !== false) {
         hostIcon = gameRoom.Host.token[0];
         guestIcon = gameRoom.Guest.token[0]
         playerToMove = gameRoom.PlayerToMove;
-        // squaresPlayed = gameRoom.SquaresPlayed
-        console.log(gameRoom.SquaresPlayed)
-        // setTheBoard(gameRoom.SquaresPlayed)
+
         return (
             <React.Fragment>
                 <div className="fadeIn" id="boardModal">
                     <div id="playerBar">
                         <div className="simpleFlex col-3">{hostIcon}</div>
-                        <select id="counter" className="form-control col-3"
-                            onChange={(e) => {
-                                alert('coming soon')
-                                console.log(e.target.value)
-                            }}>
-
-                            {times.map((time, i) =>
-                                <option key={i} value={`${time}`}>{`${time} secs`}</option>)}
-                        </select>
+                        <div className="simpleFlex col-3">
+                            <span></span>
+                            <h3>Score</h3>
+                            <span></span>
+                        </div>
                         <div className="simpleFlex col-3">{guestIcon}</div>
                     </div>
 
                     <section className="grid board">
-                        <h3>board </h3>
+                        {bigSquares.map((val, i) =>
+                            <LargeSquare key={i} id={val} props={LargeSquareProps} />)}
                     </section>
                     {playerToMove}
                     <button type="button" className="btn btn-primary" onClick={leaveRoom}>Leave room</button>
@@ -103,15 +90,11 @@ function Board({ props }) {
             </React.Fragment>
         )
     }
-
-
-
-
-
+    return (
+        <React.Fragment>
+            Loading...
+        </React.Fragment>
+    );
 }
 
 export default Board;
-
-
-// {arrayOfNumbers(10).map((val, i) =>
-//     <LargeSquare key={val} id={`lg${val}`} props={LargeSquareProps} />)}
