@@ -1,13 +1,24 @@
 import React from 'react';
 
 
+// Styles
+import './styles/Navbar.css'
+
+
 function Navbar({ props }) {
 
     const { functions, state } = props;
 
-    const open = () => {
-        functions.openModal('AvatarSelectModal')
+    console.log(functions.signOut)
+
+    console.log(state.avatar)
+    console.log(state.player)
+
+    const newAvatar = () => {
+        functions.setAvatar(null)
+        functions.setInGame(false)
     }
+    // functions.signOut() 
 
     return (
         <React.Fragment>
@@ -15,25 +26,24 @@ function Navbar({ props }) {
 
                 <span className="navbar-brand brand">Animal TicTacToe</span>
 
-                <span className="navbar-brand brand">{state.avatar === null ? ``: 
-                `${state.avatar[0]}`}</span>    
-
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobileNav"
                     aria-controls="mobileNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
+                <button className="btn btn-border p-3"
+                    onClick={() => {                        
+                        functions.signOut()                     
+                    }}>Sign out</button>
+
                 <div className="collapse navbar-collapse" id="mobileNav">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item">
-                            <span className="nav-link">Profile</span>
-                        </li>
-                        <li className="nav-item">
-                            <span className="nav-link" onClick={open}>Select Animal</span>
+                            <span className="nav-link" onClick={newAvatar}>Select New Animal</span>
                         </li>
                     </ul>
                 </div>
-                            
+
             </nav>
         </React.Fragment>
     )

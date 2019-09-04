@@ -1,0 +1,23 @@
+/* Navbar */
+
+.brand {
+    padding: 5px 15px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-family: cursive;
+}
+
+.brand:hover {
+    background-color: #465f88;
+}
+
+.nav-link {
+    font-weight: 500;
+    width: fit-content;
+}
+
+.nav-link:hover {
+    cursor: pointer;
+    background-color: #465f88;
+    border-radius: 10px;
+}
