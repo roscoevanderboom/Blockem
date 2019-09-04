@@ -1,11 +1,5 @@
-# Animal-Farm
-Another project to practice Javascript. I managed to get the main functionality of the game working. Now I offer it to the community and anyone is welcome to clone, fork or improve the project in any way they wish. 
-
-
-<h3>Notice! Main Bug:</h3>
-
-<p>The three-in-a-row function works ( based on reading 8 preset array arrangements ), though there are occasions when a player will be awarded a win, even though the array inputs are not uniform. I've been trying to figure out why this happens. 
-</p>
+# Animal-TicTacToe
+A fun little game , inspired by TicTacToe. I use React, Material Design Bootstrap and Firebase.
 
 <h3>About the Game</h3>
 
