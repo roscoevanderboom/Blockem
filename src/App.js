@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import firebase from './assets/firebase/Settings'
 
 // Components
-// import Navbar from "./assets/components/Navbar";
 import AvatarSelect from "./assets/components/AvatarSelect";
 import WaitingRoom from "./assets/components/WaitingRoom";
 import Board from "./assets/components/Board";
@@ -14,15 +13,12 @@ import './assets/components/styles/App.css';
 // Firebase references
 let auth = firebase.auth();
 
-
 let db = firebase.firestore();
+
 // Collections
 let playerList = db.collection('WaitingList');
 let gameRooms = db.collection('GameRooms');
-// Documents
-// let PlayersWaiting = playerList.doc('Players')
-// let PulicRooms = gameRooms.doc('Public')
-// let PrivateRooms = gameRooms.doc('Private')
+
 
 const anonUser = () => {
     auth.signInAnonymously()
@@ -49,6 +45,12 @@ function App() {
             }
             getPlayers(user)
         });
+    }
+    const watchPlayer = (id) => {
+        playerList.doc(id)
+            .onSnapshot(function (doc) {
+                setPlayer(doc.data());
+            });
     }
     const getPlayers = (user) => {
         playerList.get().then(function (querySnapshot) {
@@ -84,13 +86,6 @@ function App() {
             }
         });
     }
-    const watchPlayer = (id) => {
-        playerList.doc(id)
-            .onSnapshot(function (doc) {
-                setPlayer(doc.data());
-            });
-    }
-
     // Room functions
     const getRooms = () => {
         gameRooms.get().then(function (querySnapshot) {
@@ -129,10 +124,6 @@ function App() {
                     })
             });
     }
-    // const isPlayerReady = (id, ready, inRoom) => {
-    //     playerList.doc(id).update({ ready: ready, inRoom: inRoom })
-    // }
-
 
     // Render functions
     useEffect(() => {
@@ -179,15 +170,11 @@ function App() {
             firestore: {
                 playerList: playerList,
                 gameRooms: gameRooms
-            },
-            functions: {
-
-            },
-
+            },            
         }
     }
 
-    const Route = () => {
+    const Routes = () => {
         // Loading screen
         if (!(player)) {
             return (
@@ -224,7 +211,7 @@ function App() {
 
     return (
         <div className="App">
-            {Route()}
+            {Routes()}
         </div>
     );
 }

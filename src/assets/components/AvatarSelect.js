@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-// import firebase from '../firebase/Settings'
+// Components
 import tokens from './tokens/Tokens'
 
 // Styles
@@ -35,9 +35,8 @@ function AvatarSelect({ props }) {
         if (player.token[0] === hostedRooms[0].Host.token[0]) {
             alert("Host already selected that animal");
             return;
-        }
-        //  Join random room      
-        
+        }       
+
         firestore.playerList.doc(player.id)
             .update({
                 ready: true,
@@ -51,8 +50,15 @@ function AvatarSelect({ props }) {
                             token: player.token,
                             id: player.id,
                             ready: true,
-                        },                        
+                        },
                         PlayerToMove: player.token[0]
+                    })
+                    .catch(() => {
+                        firestore.playerList.doc(player.id)
+                            .update({
+                                ready: false,
+                                inRoom: false
+                            })
                     })
             })
             .catch(function (error) {
@@ -92,22 +98,17 @@ function AvatarSelect({ props }) {
             })
     }
 
-    useEffect(() => {
-
-    }, [])
 
     return (
         <React.Fragment>
             <div className="fadeIn" id="AvatarSelectModal">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
-                        <div className="modal-header justify-content-around align-items-center flex-wrap">
-                            <h5 className="modal-title text-center" id="AvatarIcon">
-                                {!(player.token) ? `Select your avatar` :
-                                    `Good luck ${player.token[2]} ${player.token[0]}`}
-                            </h5>
-                            <span>{hostedRooms.length} Rooms</span>
-                        </div>
+                        <h5 className="modal-title text-center pt-2" id="AvatarIcon">
+                            {!(player.token) ? `Select your avatar` :
+                                `Good luck ${player.token[2]} ${player.token[0]}`}
+                        </h5>
+                        <p className="text-center">{hostedRooms.length} Rooms available</p>
                         <div className="modal-body">
                             {tokens.map((token, key) =>
                                 <div key={key} className="token" id={token[1]}>

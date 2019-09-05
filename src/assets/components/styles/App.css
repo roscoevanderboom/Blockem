@@ -2,8 +2,7 @@
 
 */
 .App {
-  background-image: url('https://mdbootstrap.com/img/Photos/Others/gradient1.jpg');
-  /* background-image: url('https://source.unsplash.com/featured/?animals'); */
+  background-image: url('https://source.unsplash.com/featured/?animals');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // Constants
 import Combos from '../constants/Combos'
+import Modals from '../functions/Modals'
 
 // Components
 import LargeSquare from './LargeSquare'
@@ -17,8 +18,7 @@ function Board({ props }) {
     const { state, firestore } = props;
     const { gameRoom } = state;
 
-    let hostIcon = 'Host';
-    let guestIcon = 'Guest';
+    
     let playerToMove = '';
 
     const bigSquares = [
@@ -50,13 +50,12 @@ function Board({ props }) {
             });
 
             if (values.length > 0 && values[0] === values[1] && values[1] === values[2]) {
-                document.getElementById('winnerModal').classList.replace('fadeOut', 'fadeIn');
-                document.getElementById('boardModal').classList.replace('fadeIn', 'fadeOut');
+                Modals.open('winnerModal');
+                Modals.open('boardModal');               
                 setWinner(values[0])
             }
         })        
     }
-
     const setTheBoard = () => {
         if (gameRoom.NextSquare && !(winner)) {
             bigSquares.forEach((sq) => {
@@ -77,8 +76,6 @@ function Board({ props }) {
 
         }
     }
-
-
     const leaveRoom = () => {
         firestore.gameRooms.doc(gameRoom.ID).set({
             Available: false
@@ -99,29 +96,22 @@ function Board({ props }) {
         leaveRoom: leaveRoom,
     }
 
-    if (gameRoom !== false) {
-        hostIcon = gameRoom.Host.token[0];
-        guestIcon = gameRoom.Guest.token[0]
+    if (gameRoom !== false) {      
         playerToMove = gameRoom.PlayerToMove;
 
         return (
             <React.Fragment>
                 <div className="fadeIn" id="boardModal">
-                    <div id="playerBar">
-                        <div className="simpleFlex col-3">{hostIcon}</div>
-                        <div className="simpleFlex col-3">
-                            <span></span>
-                            <h3>Score</h3>
-                            <span></span>
-                        </div>
-                        <div className="simpleFlex col-3">{guestIcon}</div>
+                    <div id="playerBar">                       
+                        <div className="simpleFlex  pt-3 pb-2 btn btn-dark">                           
+                            <h3> {`Next player: ${playerToMove}`}</h3>                           
+                        </div>                        
                     </div>
 
                     <section className="grid board">
                         {bigSquares.map((val, i) =>
                             <LargeSquare key={i} id={val} props={LargeSquareProps} />)}
-                    </section>
-                    {`Next player: ${playerToMove}`}
+                    </section>                   
                     <button type="button" className="btn btn-primary" onClick={leaveRoom}>Leave room</button>
 
                 </div>
