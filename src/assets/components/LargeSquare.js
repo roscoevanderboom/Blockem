@@ -1,37 +1,9 @@
-import React, { useEffect } from 'react';
-
-// Constants
-import Combos from '../constants/Combos'
+import React from 'react';
 
 function LargeSquare({ props, id }) {
 
     const { state, firestore, bigSquares } = props;
     const { gameRoom, player, opponent } = state;
-
-
-    const squares = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
-    const checkThreeInARow = (parent, square) => {
-        let currentSquare = square.id.slice(0, -1)
-        let text = [];
-
-        parent.childNodes.forEach(val => text.push(val.textContent));
-        // Combos.forEach(combo => {
-        //     let values = []
-        //     combo.forEach(val => {
-        //         if (text[val] !== '') {
-        //             values.push(text[val])
-        //             return;
-        //         }
-        //     });
-
-        //     if (values.length > 0 && values[0] === values[1] && values[1] === values[2]) {
-        //         console.log(values);
-        //         console.log(currentSquare);
-        //         return;
-        //     }
-        // })
-    }
 
     const canIPlayHere = (square, parent) => {
         let result = true;       
@@ -63,14 +35,8 @@ function LargeSquare({ props, id }) {
             PlayerToMove: opponent.token[0],
             SquaresPlayed: moves,
             NextSquare: square.id.slice(square.id.indexOf('-') + 1)
-        })
-        checkThreeInARow(parent, square)
+        })        
     }
-
-    useEffect(() => {
-
-    })
-
 
     return (
         <React.Fragment>

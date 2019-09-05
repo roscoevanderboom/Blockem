@@ -24,4 +24,4 @@ yarn-error.log*
 
 # firebase api
 /src/assets/firebase/Settings
-/.firebase
+.firebase/

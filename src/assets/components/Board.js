@@ -1,17 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
+// Constants
+import Combos from '../constants/Combos'
 
 // Components
 import LargeSquare from './LargeSquare'
+import WinnerModal from './WinnerModal'
 
 // Styles
 import './styles/Board.css';
 
 function Board({ props }) {
 
+    const [winner, setWinner] = useState(false);
+
     const { state, firestore } = props;
     const { gameRoom } = state;
-
-    const times = [5, 10, 15, 20, 25, 30];
 
     let hostIcon = 'Host';
     let guestIcon = 'Guest';
@@ -29,21 +33,51 @@ function Board({ props }) {
         'BottomRight',
     ]
 
+    const threeInARow = (parent) => {
+        let text = [];       
+
+        document.getElementById(parent).childNodes.forEach(node => {
+            text.push(node.textContent)
+        });
+
+        Combos.forEach(combo => {
+            let values = []
+            combo.forEach(val => {
+                if (text[val] !== '') {
+                    values.push(text[val])
+                    return;
+                }
+            });
+
+            if (values.length > 0 && values[0] === values[1] && values[1] === values[2]) {
+                document.getElementById('winnerModal').classList.replace('fadeOut', 'fadeIn');
+                document.getElementById('boardModal').classList.replace('fadeIn', 'fadeOut');
+                setWinner(values[0])
+            }
+        })        
+    }
+
     const setTheBoard = () => {
-        if (gameRoom.NextSquare !== 'Any') {
+        if (gameRoom.NextSquare && !(winner)) {
             bigSquares.forEach((sq) => {
+                threeInARow(sq)
+
                 if (sq === gameRoom.NextSquare) {
                     document.getElementById(gameRoom.NextSquare).classList.remove('restricted');
-                    return;                
+                    return;
                 }
                 document.getElementById(sq).classList.add('restricted');
+
             });
+
             gameRoom.SquaresPlayed.forEach(val => {
                 let playedSQ = document.getElementById(val.square);
                 playedSQ.textContent = val.token;
-            });           
-        }        
+            });
+
+        }
     }
+
 
     const leaveRoom = () => {
         firestore.gameRooms.doc(gameRoom.ID).set({
@@ -59,6 +93,10 @@ function Board({ props }) {
         state: state,
         firestore: firestore,
         bigSquares: bigSquares
+    }
+    const WinnerModalProps = {
+        winner: winner,       
+        leaveRoom: leaveRoom,
     }
 
     if (gameRoom !== false) {
@@ -87,6 +125,7 @@ function Board({ props }) {
                     <button type="button" className="btn btn-primary" onClick={leaveRoom}>Leave room</button>
 
                 </div>
+                <WinnerModal props={WinnerModalProps} />
             </React.Fragment>
         )
     }

@@ -78,7 +78,7 @@ function AvatarSelect({ props }) {
             Guest: false,
             ID: player.id,
             PlayerToMove: null,
-            NextSquare: 'Any',
+            NextSquare: false,
             SquaresPlayed: []
         }
 
