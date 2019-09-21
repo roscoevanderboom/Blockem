@@ -1,4 +1,4 @@
-# Animal-TicTacToe
+# Tic Tac Farm
 A fun little game , inspired by TicTacToe. I use React, Material Design Bootstrap and Firebase.
 
 <h3>About the Game</h3>
