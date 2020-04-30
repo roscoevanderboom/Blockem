@@ -1,0 +1,44 @@
+/* AvatarSelectModal */
+
+.card {
+    max-width: 400px;
+}
+
+@media only screen and (min-width: 600px) {
+    .card {
+        margin-top: -5em;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .card {
+        margin-top: -12em;
+    }
+}
+
+.avatarIcon {
+    font-size: 2rem;
+    margin: 5px;
+    padding: 5px 10px;
+    border: solid 2px transparent;
+    background-color: transparent;
+}
+.avatarIcon-lg {
+    font-size: 5rem;
+}
+
+.avatarIcon:focus {
+    outline: none;
+}
+
+.avatarIcon:hover {
+    border-radius: 8px;
+    border: solid 2px rgba(0, 0, 0, 0.221);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}

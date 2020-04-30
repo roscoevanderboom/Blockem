@@ -2,16 +2,16 @@
 
 */
 .App {
-  background-image: url('https://source.unsplash.com/featured/?animals');
+  /* background-image: url('https://source.unsplash.com/featured/?animals'); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  background-color: slategray;
   height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0;
 }
-
 
 .fadeOut {
   visibility: hidden;
@@ -23,6 +23,11 @@
   visibility: visible;
   opacity: 1;
   transition: visibility 0.5s linear 0s, opacity 0.5s;
-
 }
 
+.container-fluid {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

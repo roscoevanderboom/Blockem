@@ -1,9 +1,9 @@
 // Main imports
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import store from './store';
-import routes from './routes';
-import './assets/css/App.css'
+import store from '../store';
+import routes from '../routes';
+import '../assets/css/App.css'
 
 function App() {
     const { state, reducers, history } = React.useContext(store);
