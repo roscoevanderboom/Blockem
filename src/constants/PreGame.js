@@ -7,7 +7,7 @@ let db = firebase.firestore();
 // Collections
 let gameRooms = db.collection('TestRooms');
 
-export const fetchGamerooms = (setRoomsList) => {
+export const fetchGamerooms = (setRoomsList, setLoading) => {
     gameRooms.get()
         .then(function (querySnapshot) {
             let rooms = [];
@@ -15,6 +15,7 @@ export const fetchGamerooms = (setRoomsList) => {
                 rooms.push(doc.data());
             });
             setRoomsList(rooms);
+            setLoading(false);
         })
         .catch(function (error) {
             console.log("Error getting documents: ", error);
@@ -46,15 +47,15 @@ export const watchGameroom = (RoomID, user, setActiveRoom, history) => {
     })
 }
 
-export const handleCreateGameRoom = (player, setRoomsList) => {
+export const handleCreateGameRoom = (player, fetchGamerooms) => {
     let newRoomID = Math.floor(Math.random() * 10000);
     let data = newRoom(player, newRoomID);
     gameRooms.doc(`${newRoomID}`).set(data)
-        .then(() => fetchGamerooms(setRoomsList))
+        .then(() => fetchGamerooms())
         .catch((err) => console.log(err.message))
 }
 
-export const handleJoinRoom = (player, setRoomsList, history) => {
+export const handleJoinRoom = (player, fetchGamerooms, history) => {
     if (!isPlayerReady(player)) {
         return;
     }
@@ -72,7 +73,7 @@ export const handleJoinRoom = (player, setRoomsList, history) => {
                     Available: false,
                     Guest: player
                 })
-                    .then(() => fetchGamerooms(setRoomsList))
+                    .then(() => fetchGamerooms())
                     .catch(() => history.push('/'))
             }
             if (rooms.length === 0) {

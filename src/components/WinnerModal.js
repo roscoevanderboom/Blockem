@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
-// Styles
-import '../assets/css/WinnerModal.css';
+import "../assets/css/WinnerModal.css"
 
 const WinnerModal = (props) => {
     const { reducers, activeRoom } = props;

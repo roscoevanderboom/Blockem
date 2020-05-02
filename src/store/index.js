@@ -24,26 +24,30 @@ export const Provider = (props) => {
     // Error
     // const [error, setError] = useState(false);
     // const [errorMessage, setErrorMessage] = useState('');
+    // Loading
+    const [loading, setLoading] = useState(true);
 
     // SignIn methods
     const signInAnonymously = () => {
-        auth.signInAnonymously();
+        auth.signInAnonymously(setLoading);
     }
     const handleUserAuth = () => {
-        auth.handleUserAuth(setUser, setRoomsList, history);
+        auth.handleUserAuth(setUser, history, fetchGamerooms);
     }
     // Pre-game methods
     const fetchGamerooms = () => {
-        pregame.fetchGamerooms(setRoomsList);
+        pregame.fetchGamerooms(setRoomsList, setLoading);
     }
     const watchGameroom = (RoomID) => {
         pregame.watchGameroom(RoomID, user, setActiveRoom, history);
     }
     const handleCreateGameRoom = () => {
-        pregame.handleCreateGameRoom(player, setRoomsList);
+        setLoading(true);
+        pregame.handleCreateGameRoom(player, fetchGamerooms);
     }
     const handleJoinRoom = () => {
-        pregame.handleJoinRoom(player, setRoomsList, history);
+        setLoading(true);
+        pregame.handleJoinRoom(player, fetchGamerooms, history);
     }
     // Waitingroom mehods
     const handlePlayerReady = () => {
@@ -66,11 +70,12 @@ export const Provider = (props) => {
         player,
         opponent,
         roomsList,
-        activeRoom
+        activeRoom,
+        loading
     };
 
     const setState = {
-        setPlayer, setOpponent, setActiveRoom
+        setPlayer, setOpponent, setActiveRoom, setLoading
     }
     const reducers = {
         //SignIn methods

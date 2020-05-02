@@ -9,7 +9,7 @@ const routes = [
     { path: '/landingPage', component: LandingPage },    
     { path: '/gameroom', component: GameRoom },
     { path: '/waitingroom', component: WaitingRoom },
-    { path: '/underConstruction', component: UnderConstruction },
+    { path: '/underConstruction', component: UnderConstruction }
 ];
 
 export default routes;

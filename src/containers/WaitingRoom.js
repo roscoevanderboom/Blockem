@@ -6,7 +6,8 @@ import '../assets/css/AvatarSelect.css';
 function WaitingRoom() {
     const { state, reducers, history } = useContext(store);
     const { activeRoom } = state;
-  
+    const [helperMessage, setHelperMessage] = useState(false);
+
     const [roomData, setRoomData] = useState({
         Host: {
             ready: false,
@@ -25,13 +26,27 @@ function WaitingRoom() {
         if (!activeRoom) {
             history.push('/');
         }
-         // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [activeRoom])
+
+    useEffect(() => {
+       let help = setTimeout(() => {
+            setHelperMessage(true);
+        }, 10000);
+
+        return()=>{
+            clearTimeout(help);
+        }
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <div className="card shadow-lg">
             <div className='card-header'>
                 <h3 className="card-title text-center pt-2">Waiting room</h3>
+                {!helperMessage ? null :
+                    <p>Been waiting long? Share the website address with a friend!</p>
+                }
             </div>
             <div className="card-body d-flex justify-content-around align-items-center">
                 <div className="d-flex flex-column align-items-center">

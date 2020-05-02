@@ -22,6 +22,7 @@
     padding: 5px 10px;
     border: solid 2px transparent;
     background-color: transparent;
+    transition: all 500ms ease-in-out;
 }
 .avatarIcon-lg {
     font-size: 5rem;
@@ -33,6 +34,8 @@
 
 .avatarIcon:hover {
     border-radius: 8px;
+    text-shadow: 2px 2px 8px rgba(255, 183, 0, 0.571);
+    transform: scale(1.2);
     border: solid 2px rgba(0, 0, 0, 0.221);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
 }

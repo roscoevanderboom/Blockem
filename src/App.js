@@ -3,13 +3,14 @@ import React, { useEffect, useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import store from './store';
 import routes from './routes';
+import Loading from './containers/Loading';
 
 import { isUserInRoom, arePlayerReady } from './constants/Verification';
 import './assets/css/App.css'
 
 function App() {
     const { state, reducers, history } = useContext(store);
-    const { user, roomsList, activeRoom } = state;
+    const { user, roomsList, activeRoom, loading } = state;
 
     useEffect(() => {
         reducers.handleUserAuth();
@@ -45,6 +46,7 @@ function App() {
                     )}
                 </Switch>
             </div>
+            <Loading loading={loading} />
         </div>
     );
 }

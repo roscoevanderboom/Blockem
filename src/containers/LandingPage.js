@@ -1,9 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import store from '../store';
 
 function Landing() {
-    const { reducers } = useContext(store);
+    const { reducers, setState } = useContext(store);
     const { signInAnonymously } = reducers;
+
+    useEffect(() => {
+        setState.setLoading(false);
+        // eslint-disable-next-line
+    }, [])
     return (
         <div className="card shadow-lg">
             <div className="card-body">
