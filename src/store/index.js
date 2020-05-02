@@ -36,10 +36,10 @@ export const Provider = (props) => {
     }
     // Pre-game methods
     const fetchGamerooms = () => {
-        pregame.fetchGamerooms(setRoomsList, setLoading);
+        pregame.fetchGamerooms(setRoomsList);
     }
     const watchGameroom = (RoomID) => {
-        pregame.watchGameroom(RoomID, user, setActiveRoom, history);
+        pregame.watchGameroom(RoomID, user, setActiveRoom, setLoading);
     }
     const handleCreateGameRoom = () => {
         setLoading(true);

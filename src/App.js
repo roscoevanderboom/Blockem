@@ -4,12 +4,11 @@ import { Switch, Route } from 'react-router-dom';
 import store from './store';
 import routes from './routes';
 import Loading from './containers/Loading';
-
 import { isUserInRoom, arePlayerReady } from './constants/Verification';
 import './assets/css/App.css'
 
 function App() {
-    const { state, reducers, history } = useContext(store);
+    const { state, reducers, history, setState } = useContext(store);
     const { user, roomsList, activeRoom, loading } = state;
 
     useEffect(() => {
@@ -17,10 +16,13 @@ function App() {
         // eslint-disable-next-line
     }, [user])
 
-    useEffect(() => {  
+    useEffect(() => {
         isUserInRoom(roomsList, user)
             .then((room) => reducers.watchGameroom(room.RoomID))
-            .catch(() => history.push('/'))
+            .catch(() => {
+                history.push('/');
+                setState.setLoading(false);
+            })
         // eslint-disable-next-line
     }, [roomsList])
 

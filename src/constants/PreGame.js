@@ -1,13 +1,12 @@
-import firebase from './firebase/Settings';
 import { newRoom } from './GameRoomObjects';
 import { isPlayerReady, isAvatarAvailable } from './Verification';
-// Firebase references
-let db = firebase.firestore();
+import { gameRooms } from './firebase/Collections';
 
-// Collections
-let gameRooms = db.collection('TestRooms');
+const random = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
 
-export const fetchGamerooms = (setRoomsList, setLoading) => {
+export const fetchGamerooms = (setRoomsList) => {
     gameRooms.get()
         .then(function (querySnapshot) {
             let rooms = [];
@@ -15,42 +14,44 @@ export const fetchGamerooms = (setRoomsList, setLoading) => {
                 rooms.push(doc.data());
             });
             setRoomsList(rooms);
-            setLoading(false);
         })
         .catch(function (error) {
             console.log("Error getting documents: ", error);
         });
 }
 
-export const watchGameroom = (RoomID, user, setActiveRoom, history) => {
-    gameRooms.doc(`${RoomID}`).onSnapshot(function (doc) {
+export const watchGameroom = (RoomID, user, setActiveRoom, setLoading) => {
+    gameRooms.doc(RoomID).onSnapshot(function (doc) {
         // Game is in session
         if (doc.exists) {
             let userIsInRoom = doc.data().Host.id === user.uid || doc.data().Guest.id === user.uid
             if (userIsInRoom) {
                 setActiveRoom(doc.data());
+                setLoading(false);
                 return;
             }
         }
         if (doc.exists) {
             let userIsInRoom = doc.data().Host.id === user.uid || doc.data().Guest.id === user.uid
             if (!userIsInRoom) {
+                setLoading(false);
                 return;
             }
         }
         // If room has been deleted by host
+        setLoading(false);
         setActiveRoom(false);
     }, function (err) {
         console.log(err)
         setActiveRoom(false);
-        history.push('/');
+        setLoading(false);
     })
 }
 
 export const handleCreateGameRoom = (player, fetchGamerooms) => {
-    let newRoomID = Math.floor(Math.random() * 10000);
+    let newRoomID = random();
     let data = newRoom(player, newRoomID);
-    gameRooms.doc(`${newRoomID}`).set(data)
+    gameRooms.doc(newRoomID).set(data)
         .then(() => fetchGamerooms())
         .catch((err) => console.log(err.message))
 }
@@ -69,7 +70,7 @@ export const handleJoinRoom = (player, fetchGamerooms, history) => {
                 }
             })
             if (rooms.length > 0) {
-                gameRooms.doc(`${rooms[0]}`).update({
+                gameRooms.doc(rooms[0]).update({
                     Available: false,
                     Guest: player
                 })

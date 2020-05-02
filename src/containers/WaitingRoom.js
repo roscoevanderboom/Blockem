@@ -30,15 +30,21 @@ function WaitingRoom() {
     }, [activeRoom])
 
     useEffect(() => {
-       let help = setTimeout(() => {
-            setHelperMessage(true);
+        let help = setTimeout(() => {
+            if (activeRoom && !activeRoom.Guest.id) {
+                setHelperMessage(true);
+            }
         }, 10000);
 
-        return()=>{
+        if (activeRoom && activeRoom.Guest.id) {
+            setHelperMessage(false);
+        }
+
+        return () => {
             clearTimeout(help);
         }
         // eslint-disable-next-line
-    }, [])
+    }, [activeRoom.Guest])
 
     return (
         <div className="card shadow-lg">

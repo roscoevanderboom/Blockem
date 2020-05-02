@@ -1,13 +1,8 @@
 import combos from './Combos';
-import firebase, { FieldValue } from './firebase/Settings';
+import { FieldValue } from './firebase/Settings';
 import { newMove } from './GameRoomObjects';
 import unsubscribeFromActiveRoom from './Unsubscribe';
-
-// Firebase references
-let db = firebase.firestore();
-
-// Collections
-let gameRooms = db.collection('TestRooms');
+import { gameRooms } from './firebase/Collections';
 
 const three_in_a_row = (squares) => {
     if (squares.length === 3
@@ -163,7 +158,7 @@ export const playerMove = (e, activeRoom, user, player, opponent) => {
 
         let move = newMove(player, smSquare);
 
-        gameRooms.doc(`${activeRoom.RoomID}`).update({
+        gameRooms.doc(activeRoom.RoomID).update({
             NextPlayer: opponent,
             SquaresPlayed: FieldValue.arrayUnion(move),
             NextSquare: nextSquareId + '-lg'
@@ -175,12 +170,12 @@ export const playerMove = (e, activeRoom, user, player, opponent) => {
     alert('Sorry. Not your turn')
 }
 export const handleWinner = (winner, activeRoom) => {
-    gameRooms.doc(`${activeRoom.RoomID}`).update({ Winner: winner })
+    gameRooms.doc(activeRoom.RoomID).update({ Winner: winner })
 }
 export const handleLeaveGame = (activeRoom, setActiveRoom, history) => {
     if (!activeRoom.Winner) {
         console.log("your account will be deleted if you leave early");
     }
-    gameRooms.doc(`${activeRoom.RoomID}`).delete()
+    gameRooms.doc(activeRoom.RoomID).delete()
         .then(() => unsubscribeFromActiveRoom(gameRooms, activeRoom.RoomID, setActiveRoom, history));
 }
