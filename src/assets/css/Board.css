@@ -58,14 +58,14 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    font-size: xx-large;
+    font-size: 2rem;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 500px) {
     .board {
         border-width: 5px;
-        width: 100%;
-        height: 80vh;
+        width: 100vw;
+        height: 70vh;
     }
 
     #tokens {
@@ -75,5 +75,11 @@
     .smallSquare {
         width: 35px;
         height: 35px;
+        border: 2px solid #2c3e50;
+        font-size: 1.75rem;
+    }
+
+    .closed {
+        font-size: 5em;
     }
 }

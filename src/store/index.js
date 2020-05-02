@@ -1,150 +1,98 @@
 import React, { createContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import firebase from '../constants/firebase/Settings';
-import { isMoveAllowed } from '../constants/GameRoom';
+// Auth
+import * as auth from '../constants/firebase/Auth';
+// Pre-game methods
+import * as pregame from '../constants/PreGame';
+// Waitingroom mehods
+import * as waitingroom from '../constants/WaitingRoom';
+// In-Game methods
+import * as inGame from '../constants/GameRoom';
 
-// Firebase references
-let auth = firebase.auth();
-let db = firebase.firestore();
-
-// Collections
-let playerList = db.collection('TestList');
-let gameRooms = db.collection('TestRooms');
-
+// Store
 const AppStore = createContext();
 
 export const Provider = (props) => {
     const history = useHistory();
+    // User state
     const [user, setUser] = useState(false);
     const [player, setPlayer] = useState(false);
     const [opponent, setOpponent] = useState(false);
-    const [winner, setWinner] = useState(false);
-    const [rooms, setRooms] = useState([]);
+    // Game State
+    const [roomsList, setRoomsList] = useState([]);
     const [activeRoom, setActiveRoom] = useState(false);
+    // Error
+    // const [error, setError] = useState(false);
+    // const [errorMessage, setErrorMessage] = useState('');
 
-    const anonUser = () => {
-        auth.signInAnonymously()
-            .catch(function (error) {
-                console.log(error.message)
-            })
+    // SignIn methods
+    const signInAnonymously = () => {
+        auth.signInAnonymously();
     }
     const handleUserAuth = () => {
-        auth.onAuthStateChanged(async (user) => {
-            // If it's a first time user
-            if (!(user)) {
-                anonUser()
-                return;
-            }
-            setUser(user)
-        });
+        auth.handleUserAuth(setUser, setRoomsList, history);
     }
-    const getGameRoomsList = () => {
-        gameRooms.onSnapshot(function (querySnapshot) {
-            let x = [];
-            querySnapshot.forEach(function (doc) {
-                if (doc.data()) {
-                    x.push(doc.data());
-                }
-            });
-            setRooms(x);
-        }, function (error) {
-            console.log(error.message);
-        })
+    // Pre-game methods
+    const fetchGamerooms = () => {
+        pregame.fetchGamerooms(setRoomsList);
     }
-    const watchActiveRoom = (RoomID) => {
-
-        gameRooms.doc(RoomID).onSnapshot(function (doc) {
-            if (doc.exists) {
-                const players_not_ready = !doc.data().Host.ready || !doc.data().Guest.read;
-                const players_ready = doc.data().Host.ready || doc.data().Guest.read;
-                const game_in_session = doc.data().SquaresPlayed.length > 0;
-                setActiveRoom(doc.data());
-                if (doc.data().Host.id === user.uid) {
-                    setPlayer(doc.data().Host);
-                    setOpponent(doc.data().Guest)
-                } else if (doc.data().Guest.id === user.uid) {
-                    setPlayer(doc.data().Guest);
-                    setOpponent(doc.data().Host)
-                }
-                if (players_not_ready) {
-                    history.push('/waitingroom');
-                }
-                if (game_in_session || players_ready) {
-                    history.push('/gameroom');
-                }
-            }
-        }, function () {
-            setActiveRoom(false);
-            history.push('/');
-        })
+    const watchGameroom = (RoomID) => {
+        pregame.watchGameroom(RoomID, user, setActiveRoom, history);
+    }
+    const handleCreateGameRoom = () => {
+        pregame.handleCreateGameRoom(player, setRoomsList);
+    }
+    const handleJoinRoom = () => {
+        pregame.handleJoinRoom(player, setRoomsList, history);
+    }
+    // Waitingroom mehods
+    const handlePlayerReady = () => {
+        waitingroom.handlePlayerReady(activeRoom, user);
+    }
+    const handleLeaveWaitingRoom = () => {
+        waitingroom.handleLeaveWaitingRoom(user, activeRoom, setActiveRoom, history)
+    }
+    // Game methods
+    const handlePlayerMove = (e) => {
+        inGame.playerMove(e, activeRoom, user, player, opponent);
     }
     const handleLeaveGame = () => {
-        setWinner(false);
-        if (activeRoom.Host.id === user.uid) {
-            gameRooms.doc(activeRoom.RoomID).delete()
-                .then(() => { history.push('/') })
-        } else if (activeRoom.Guest.id === user.uid) {
-            gameRooms.doc(activeRoom.RoomID).update({
-                Guest: {
-                    token: false,
-                    id: false,
-                    ready: false
-                }
-            }).then(() => { history.push('/') })
-                .catch(() => { history.push('/') })
-        }
-    }
-    const handlePlayerMove = (e) => {
-        if (activeRoom.NextPlayer.id === player.id) {
-            let parent = e.target.parentElement;
-            let smSquare = e.target;
-            let nextSquareId = smSquare.id.slice(0, smSquare.id.indexOf('-'));
-
-            if (!isMoveAllowed(parent, e.target, player, opponent)) {
-                alert('That move is not allowed');
-                return;
-            }
-
-            let currentMoves = activeRoom.SquaresPlayed;
-
-            let newMove = {
-                image: player.token.image,
-                square: smSquare.id,
-                name: player.token.name
-            }
-            currentMoves.push(newMove)
-
-            gameRooms.doc(activeRoom.RoomID).update({
-                NextPlayer: opponent,
-                SquaresPlayed: currentMoves,
-                NextSquare: nextSquareId + '-lg'
-            })
-            return;
-        }
-        alert('Sorry. Not your turn')
+        inGame.handleLeaveGame(activeRoom, setActiveRoom, history);
     }
 
+    // State objects for providers props
     const state = {
-        user, player, opponent, winner, rooms, activeRoom
+        user,
+        player,
+        opponent,
+        roomsList,
+        activeRoom
     };
 
     const setState = {
-        setPlayer, setOpponent, setWinner, setActiveRoom
+        setPlayer, setOpponent, setActiveRoom
     }
     const reducers = {
+        //SignIn methods
+        signInAnonymously,
         handleUserAuth,
-        handleLeaveGame,
-        getGameRoomsList,
-        watchActiveRoom,
-        handlePlayerMove
+        // Pre-game
+        fetchGamerooms,
+        watchGameroom,
+        handleCreateGameRoom,
+        handleJoinRoom,
+        // Waiting room methods
+        handlePlayerReady,
+        handleLeaveWaitingRoom,
+        // Game methods
+        handlePlayerMove,
+        handleLeaveGame
     };
 
-    const fb = {
-        auth, playerList, gameRooms
-    }
+
     return (
         <AppStore.Provider
-            value={{ state, setState, reducers, history, fb }}>
+            value={{ state, setState, reducers, history }}>
             {props.children}
         </AppStore.Provider>
     )

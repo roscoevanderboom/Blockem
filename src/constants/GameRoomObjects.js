@@ -1,13 +1,28 @@
-export const newRoom = (state) => {
+const noGuest = () => {
+    return {
+        token: '',
+        id: false,
+        ready: false
+    }
+}
+
+export const newRoom = (host,newRoomID) => {
     return {
         Available: true,
-        Host: state.player,
-        Guest: {
-            token: false,
-            id: false,
-            ready: false
-        },
-        RoomID: state.user.uid,
-        SquaresPlayed: []
+        Host: host,
+        Guest: noGuest(),
+        RoomID: newRoomID,
+        SquaresPlayed: [],
+        NextPlayer: { token: { image: '' } },
+        NextSquare: '',
+        Winner: false
+    }
+}
+
+export const newMove = (player, smSquare) => {
+    return {
+        image: player.token.image,
+        square: smSquare.id,
+        name: player.token.name
     }
 }

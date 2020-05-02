@@ -1,4 +1,13 @@
 import combos from './Combos';
+import firebase, { FieldValue } from './firebase/Settings';
+import { newMove } from './GameRoomObjects';
+import unsubscribeFromActiveRoom from './Unsubscribe';
+
+// Firebase references
+let db = firebase.firestore();
+
+// Collections
+let gameRooms = db.collection('TestRooms');
 
 const three_in_a_row = (squares) => {
     if (squares.length === 3
@@ -15,14 +24,6 @@ const full_square = (squares) => {
     }
     return true;
 }
-const setSmallSquares = (activeRoom) => {
-    activeRoom.SquaresPlayed.forEach(sq => {
-        let square = document.getElementById(sq.square);
-        if (square !== null) {
-            square.textContent = sq.image;
-        }
-    })
-}
 const no_winner = (bigSquares) => {
     let fullSquares = [];
     bigSquares.forEach(sq => {
@@ -36,6 +37,42 @@ const no_winner = (bigSquares) => {
         return true;
     }
     return false;
+}
+export const setPlayers = (room, user, setPlayer, setOpponent) => {
+    switch (isHost(room, user)) {
+        case false:
+            setPlayer(room.Guest);
+            setOpponent(room.Host);
+            break;
+        case true:
+            setPlayer(room.Host);
+            setOpponent(room.Guest);
+            break;
+        default:
+            break;
+    }
+
+}
+export const isHost = (room, user) => {
+    if (room.Host.id === user.uid) {
+        return true;
+    }
+    return false;
+}
+export const isMoveAllowed = (parent, square, player, opponent) => {
+    if (parent.classList.contains('restricted', `${player.token.name}`, `${opponent.token.name}`)
+        || square.textContent !== '') {
+        return false
+    }
+    return true
+}
+export const setSmallSquares = (activeRoom) => {
+    activeRoom.SquaresPlayed.forEach(sq => {
+        let square = document.getElementById(sq.square);
+        if (square !== null) {
+            square.textContent = sq.image;
+        }
+    })
 }
 export const check_small_squares = (parent) => {
     let children = parent.childNodes;
@@ -61,7 +98,7 @@ export const check_small_squares = (parent) => {
         parent.classList.add(`full`);
     }
 }
-export const check_big_squares = (bigSquares, setWinner) => {
+export const check_big_squares = (bigSquares, activeRoom) => {
     combos.forEach(combo => {
         let squaresPlayed = [];
         combo.forEach(value => {
@@ -71,16 +108,14 @@ export const check_big_squares = (bigSquares, setWinner) => {
             }
         })
         if (three_in_a_row(squaresPlayed)) {
-            setWinner(squaresPlayed[0]);
+            handleWinner(squaresPlayed[0], activeRoom);
         }
     })
 }
-export const setBoard = (bigSquares, winner, activeRoom, setWinner) => {
+export const setRestrictions = (bigSquares, winner, activeRoom) => {
     let nextSquare = document.getElementById(activeRoom.NextSquare);
 
     if (nextSquare !== null) {
-        setSmallSquares(activeRoom);
-
         // Close all squares if there is a winner
         if (winner) {
             bigSquares.forEach(sq => {
@@ -90,10 +125,10 @@ export const setBoard = (bigSquares, winner, activeRoom, setWinner) => {
         }
         // If the next square is full, open all other available squares
         if (no_winner(bigSquares)) {
-            setWinner('tie');
+            handleWinner('tie', activeRoom);
             return;
         }
-    
+
         // If the next square is closed or full, open all other available squares
         if (nextSquare.classList.contains('closed') || nextSquare.classList.contains('full')) {
             bigSquares.forEach(sq => {
@@ -103,7 +138,7 @@ export const setBoard = (bigSquares, winner, activeRoom, setWinner) => {
             });
             return;
         }
-    
+
         // Remove restriction from the next square to be played in
         bigSquares.forEach(sq => {
             if (sq === nextSquare) {
@@ -112,13 +147,40 @@ export const setBoard = (bigSquares, winner, activeRoom, setWinner) => {
             } else if (!sq.classList.contains('closed')) {
                 sq.classList.add('restricted');
             }
-        });  
-    }    
-}
-export const isMoveAllowed = (parent, square, player, opponent) => {
-    if (parent.classList.contains('restricted', `${player.token.name}`, `${opponent.token.name}`)
-        || square.textContent !== '') {
-        return false
+        });
     }
-    return true
-} 
+}
+export const playerMove = (e, activeRoom, user, player, opponent) => {
+    if (activeRoom.NextPlayer.id === user.uid) {
+        let parent = e.target.parentElement;
+        let smSquare = e.target;
+        let nextSquareId = smSquare.id.slice(0, smSquare.id.indexOf('-'));
+
+        if (!isMoveAllowed(parent, e.target, player, opponent)) {
+            alert('That move is not allowed');
+            return;
+        }
+
+        let move = newMove(player, smSquare);
+
+        gameRooms.doc(`${activeRoom.RoomID}`).update({
+            NextPlayer: opponent,
+            SquaresPlayed: FieldValue.arrayUnion(move),
+            NextSquare: nextSquareId + '-lg'
+        }).catch((err) => {
+            console.log(err.message);
+        })
+        return;
+    }
+    alert('Sorry. Not your turn')
+}
+export const handleWinner = (winner, activeRoom) => {
+    gameRooms.doc(`${activeRoom.RoomID}`).update({ Winner: winner })
+}
+export const handleLeaveGame = (activeRoom, setActiveRoom, history) => {
+    if (!activeRoom.Winner) {
+        console.log("your account will be deleted if you leave early");
+    }
+    gameRooms.doc(`${activeRoom.RoomID}`).delete()
+        .then(() => unsubscribeFromActiveRoom(gameRooms, activeRoom.RoomID, setActiveRoom, history));
+}

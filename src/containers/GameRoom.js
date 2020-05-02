@@ -1,31 +1,60 @@
 import React, { useContext, useEffect } from 'react';
 import store from '../store';
 
-import { setBoard, check_big_squares, check_small_squares } from '../constants/GameRoom';
+import {
+    setPlayers,
+    setSmallSquares,
+    setRestrictions,
+    check_big_squares,
+    check_small_squares
+} from '../constants/GameRoom';
 import squares from '../constants/Squares';
 
 import WinnerModal from '../components/WinnerModal';
 import '../assets/css/Board.css'
 
-
 function GameRoom() {
-    const { state, reducers, setState } = useContext(store);
-    const { setWinner } = setState;
-    const { winner, activeRoom } = state;
+    const { state, reducers, setState, history } = useContext(store);
+    const { handlePlayerMove, handleLeaveGame } = reducers;
+    const { setPlayer, setOpponent, setActiveRoom } = setState;
+    const { winner, activeRoom, user } = state;
+
+    useEffect(() => {
+        if (activeRoom) {
+            setPlayers(activeRoom, user, setPlayer, setOpponent)
+        }
+        if (activeRoom && !activeRoom.Guest.id) {
+            alert('Guest has left the room.');
+        }
+        if (!activeRoom) {
+            history.push('/');
+        }
+        //eslint-disable-next-line
+    }, [activeRoom])
 
     useEffect(() => {
         let board = document.getElementById('gameboard');
         if (board !== null) {
             let bigSquares = board.childNodes;
-            setBoard(bigSquares, winner, activeRoom, setWinner);
-            check_big_squares(bigSquares, setWinner);
+            setSmallSquares(activeRoom);
+
+            check_big_squares(bigSquares, activeRoom);
             bigSquares.forEach(sq => {
                 check_small_squares(sq)
             });
-            setBoard(bigSquares, winner, activeRoom, setWinner);
+            setRestrictions(bigSquares, winner, activeRoom);
         }
         //eslint-disable-next-line
-    }, [state.activeRoom.NextPlayer])
+    })
+
+    useEffect(() => {
+        return () => {
+            setActiveRoom(false);
+            setPlayer(false);
+            setOpponent(false);
+        }
+        //eslint-disable-next-line
+    }, [])
 
     return (activeRoom &&
         <React.Fragment>
@@ -45,7 +74,7 @@ function GameRoom() {
                                 <div key={sqval}
                                     id={sqval + '-sm' + i}
                                     className="smallSquare "
-                                    onClick={(e) => reducers.handlePlayerMove(e)} >
+                                    onClick={(e) => handlePlayerMove(e)} >
                                 </div>
                             )}
                         </div>
@@ -54,11 +83,11 @@ function GameRoom() {
 
                 <div className="d-flex justify-content-around mt-2 w-50">
                     <button type="button"
-                        onClick={reducers.handleLeaveGame}
+                        onClick={handleLeaveGame}
                         className="btn-lg btn-dark shadow-lg">Leave</button>
                 </div>
             </div>
-            <WinnerModal winner={winner} reducers={reducers} />
+            <WinnerModal activeRoom={activeRoom} reducers={reducers} />
         </React.Fragment>
     )
 }

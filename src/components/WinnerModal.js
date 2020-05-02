@@ -4,21 +4,21 @@ import React, { useEffect, useState } from 'react';
 import '../assets/css/WinnerModal.css';
 
 const WinnerModal = (props) => {
-    const { winner, reducers } = props;
+    const { reducers, activeRoom } = props;
     const [message, setMessage] = useState('');
 
 
     useEffect(() => {
-        if (winner === 'tie') {
+        if (activeRoom.Winner === 'tie') {
             setMessage(`It's a tie! Better luck next time.`);
             return;
         }
-        setMessage(`${winner} is the winner!!`);
-    }, [winner])
+        setMessage(`${activeRoom.Winner} is the winner!!`);
+    }, [activeRoom.Winner])
 
     return (
         <React.Fragment>
-            <div id="winnerModal" className={winner ? "fadeIn" : "fadeOut"}>
+            <div id="winnerModal" className={activeRoom.Winner ? "fadeIn" : "fadeOut"}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header justify-content-around align-items-center flex-wrap">

@@ -1,35 +1,37 @@
 // Main imports
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import store from './store';
 import routes from './routes';
+
+import { isUserInRoom, arePlayerReady } from './constants/Verification';
 import './assets/css/App.css'
 
 function App() {
-    const { state, reducers, history } = React.useContext(store);
+    const { state, reducers, history } = useContext(store);
+    const { user, roomsList, activeRoom } = state;
 
-    React.useEffect(() => {
+    useEffect(() => {
         reducers.handleUserAuth();
-        reducers.getGameRoomsList();
         // eslint-disable-next-line
-    }, [])
+    }, [user])
 
-    React.useEffect(() => {
-        if (!state.activeRoom) {
-            history.push('/')
+    useEffect(() => {  
+        isUserInRoom(roomsList, user)
+            .then((room) => reducers.watchGameroom(room.RoomID))
+            .catch(() => history.push('/'))
+        // eslint-disable-next-line
+    }, [roomsList])
+
+    useEffect(() => {
+        if (activeRoom && !activeRoom.Winner) {
+            arePlayerReady(activeRoom)
+                ? history.push('/gameroom')
+                : history.push('/waitingroom');
         }
         // eslint-disable-next-line
-    }, [state.activeRoom])
+    }, [activeRoom])
 
-    React.useEffect(() => {
-        state.rooms.forEach(room => {
-            if (room.Host.id === state.user.uid || room.Guest.id === state.user.uid) {
-                reducers.watchActiveRoom(room.RoomID)
-                return;
-            }
-        })
-        // eslint-disable-next-line
-    }, [state.rooms])
     return (
         <div className="App">
             <div className="container-fluid">
