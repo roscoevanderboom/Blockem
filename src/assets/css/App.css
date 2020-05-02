@@ -2,11 +2,11 @@
 
 */
 .App {
-  /* background-image: url('https://source.unsplash.com/featured/?animals'); */
+  background-image: url('https://source.unsplash.com/featured/?animals');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: slategray;
+  /* background-color: slategray; */
   height: 100vh;
   width: 100%;
   margin: 0;
