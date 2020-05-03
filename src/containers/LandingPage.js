@@ -13,7 +13,7 @@ function Landing() {
         <div className="card shadow-lg">
             <div className="card-body">
                 <h3>Welcome new user</h3>
-                <p>You currently don't have an account. Click below to create and
+                <p>You currently don't have an account. Click below to create an
                 anonymous account.
                 </p>
             </div>

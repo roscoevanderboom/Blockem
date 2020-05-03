@@ -46,7 +46,6 @@ export const Provider = (props) => {
         pregame.handleCreateGameRoom(player, fetchGamerooms);
     }
     const handleJoinRoom = () => {
-        setLoading(true);
         pregame.handleJoinRoom(player, fetchGamerooms, history);
     }
     // Waitingroom mehods
