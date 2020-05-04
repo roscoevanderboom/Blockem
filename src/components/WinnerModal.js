@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import "../assets/css/WinnerModal.css"
+import styles from '../assets/js-css/main';
+
+
+const { fixed_top_left_cover } = styles;
 
 const WinnerModal = (props) => {
     const { reducers, activeRoom } = props;
@@ -16,7 +19,7 @@ const WinnerModal = (props) => {
 
     return (
         <React.Fragment>
-            <div id="winnerModal" className={activeRoom.Winner ? "fadeIn" : "fadeOut"}>
+            <div style={fixed_top_left_cover} className={activeRoom.Winner ? "fadeIn" : "fadeOut"}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header justify-content-around align-items-center flex-wrap">

@@ -48,38 +48,51 @@ export const watchGameroom = (RoomID, user, setActiveRoom, setLoading) => {
     })
 }
 
-export const handleCreateGameRoom = (player, fetchGamerooms) => {
+export const handleCreateGameRoom = (player, fetchGamerooms, setLoading, handleErrors) => {
+    if (!isPlayerReady(player, handleErrors)) {
+        return;
+    }
+    setLoading(true);
     let newRoomID = random();
     let data = newRoom(player, newRoomID);
     gameRooms.doc(newRoomID).set(data)
         .then(() => fetchGamerooms())
-        .catch((err) => console.log(err.message))
+        .catch((err) => {
+            setLoading(false);
+            console.log(err.message)
+        })
 }
 
-export const handleJoinRoom = (player, fetchGamerooms, history) => {
-    if (!isPlayerReady(player)) {
+export const handleJoinRoom = (player, fetchGamerooms, setLoading, history, handleErrors) => {
+    if (!isPlayerReady(player, handleErrors)) {
         return;
     }
+    let rooms = [];
+    setLoading(true);
     gameRooms.where('Available', '==', true).get()
         .then((querySnapshot) => {
-            let rooms = [];
             querySnapshot.forEach((doc) => {
-                if (!doc.data().Guest.id
-                    && isAvatarAvailable(player, doc.data())) {
-                    rooms.push(doc.data().RoomID)
+                if (doc.data().Guest.id || !isAvatarAvailable(player, doc.data())) {
+                    return;
                 }
+                rooms.push(doc.data().RoomID)
             })
-            if (rooms.length > 0) {
-                gameRooms.doc(rooms[0]).update({
-                    Available: false,
-                    Guest: player
-                })
-                    .then(() => fetchGamerooms())
-                    .catch(() => history.push('/'))
-            }
-            if (rooms.length === 0) {
-                alert('No rooms available. Create a new room.')
-            }
-
         })
+        .then(() => {
+            if (rooms.length === 0) {
+                setLoading(false);
+                handleErrors('No rooms available. Try a different animal or create a new room.');
+                return;
+            }
+            gameRooms.doc(rooms[0]).update({
+                Available: false,
+                Guest: player
+            })
+                .then(() => fetchGamerooms())
+                .catch(() => {
+                    setLoading(false);
+                    history.push('/')
+                })
+        })
+        .catch((err) => console.log(err.message))
 }

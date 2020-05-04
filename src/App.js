@@ -4,8 +4,10 @@ import { Switch, Route } from 'react-router-dom';
 import store from './store';
 import routes from './routes';
 import Loading from './containers/Loading';
+import ErrorModal from './components/ErrorModal';
 import { isUserInRoom, arePlayerReady } from './constants/Verification';
-import './assets/css/App.css'
+import './assets/css/App.css';
+import './assets/css/Buttons.css';
 
 function App() {
     const { state, reducers, history, setState } = useContext(store);
@@ -49,6 +51,7 @@ function App() {
                 </Switch>
             </div>
             <Loading loading={loading} />
+            <ErrorModal state={state} reducers={reducers} />
         </div>
     );
 }

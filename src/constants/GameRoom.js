@@ -145,14 +145,14 @@ export const setRestrictions = (bigSquares, winner, activeRoom) => {
         });
     }
 }
-export const playerMove = (e, activeRoom, user, player, opponent) => {
+export const playerMove = (e, activeRoom, user, player, opponent, handleErrors) => {
     if (activeRoom.NextPlayer.id === user.uid) {
         let parent = e.target.parentElement;
         let smSquare = e.target;
         let nextSquareId = smSquare.id.slice(0, smSquare.id.indexOf('-'));
 
         if (!isMoveAllowed(parent, e.target, player, opponent)) {
-            alert('That move is not allowed');
+            handleErrors('That move is not allowed');
             return;
         }
 
@@ -167,7 +167,7 @@ export const playerMove = (e, activeRoom, user, player, opponent) => {
         })
         return;
     }
-    alert('Sorry. Not your turn')
+    handleErrors('Sorry. Not your turn');
 }
 export const handleWinner = (winner, activeRoom) => {
     gameRooms.doc(activeRoom.RoomID).update({ Winner: winner })

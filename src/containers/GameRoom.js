@@ -17,7 +17,7 @@ function GameRoom() {
     const { state, reducers, setState, history } = useContext(store);
     const { handlePlayerMove, handleLeaveGame } = reducers;
     const { setPlayer, setOpponent, setActiveRoom } = setState;
-    const { winner, activeRoom, user } = state;
+    const { winner, activeRoom, user, player } = state;
 
     useEffect(() => {
         if (activeRoom) {
@@ -48,10 +48,10 @@ function GameRoom() {
     })
 
     useEffect(() => {
-        return () => {
-            setActiveRoom(false);
-            setPlayer(false);
+        return () => {           
+            setPlayer({ ...player, ready: false });
             setOpponent(false);
+            setActiveRoom(false);
         }
         //eslint-disable-next-line
     }, [])
@@ -84,7 +84,7 @@ function GameRoom() {
                 <div className="d-flex justify-content-around mt-2 w-50">
                     <button type="button"
                         onClick={handleLeaveGame}
-                        className="btn-lg btn-dark shadow-lg">Leave</button>
+                        className="btn-lg leaveGameroom shadow-lg">Leave</button>
                 </div>
             </div>
             <WinnerModal activeRoom={activeRoom} reducers={reducers} />

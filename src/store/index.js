@@ -9,6 +9,9 @@ import * as waitingroom from '../constants/WaitingRoom';
 // In-Game methods
 import * as inGame from '../constants/GameRoom';
 
+// Initial state
+import * as init from './initialState';
+
 // Store
 const AppStore = createContext();
 
@@ -16,23 +19,27 @@ export const Provider = (props) => {
     const history = useHistory();
     // User state
     const [user, setUser] = useState(false);
-    const [player, setPlayer] = useState(false);
+    const [accountAge, setAccountAge] = useState(0);
+    const [player, setPlayer] = useState(init.player);
     const [opponent, setOpponent] = useState(false);
     // Game State
     const [roomsList, setRoomsList] = useState([]);
     const [activeRoom, setActiveRoom] = useState(false);
     // Error
-    // const [error, setError] = useState(false);
-    // const [errorMessage, setErrorMessage] = useState('');
+    const [error, setError] = useState(false);
     // Loading
     const [loading, setLoading] = useState(true);
 
+    // Error handling
+    const handleErrors = (message) => {
+        setError(error ? false : message);
+    }
     // SignIn methods
     const signInAnonymously = () => {
         auth.signInAnonymously(setLoading);
     }
     const handleUserAuth = () => {
-        auth.handleUserAuth(setUser, history, fetchGamerooms);
+        auth.handleUserAuth(setUser, history, fetchGamerooms, setAccountAge);
     }
     // Pre-game methods
     const fetchGamerooms = () => {
@@ -42,11 +49,10 @@ export const Provider = (props) => {
         pregame.watchGameroom(RoomID, user, setActiveRoom, setLoading);
     }
     const handleCreateGameRoom = () => {
-        setLoading(true);
-        pregame.handleCreateGameRoom(player, fetchGamerooms);
+        pregame.handleCreateGameRoom(player, fetchGamerooms, setLoading, handleErrors);
     }
     const handleJoinRoom = () => {
-        pregame.handleJoinRoom(player, fetchGamerooms, history);
+        pregame.handleJoinRoom(player, fetchGamerooms, setLoading, history, handleErrors);
     }
     // Waitingroom mehods
     const handlePlayerReady = () => {
@@ -57,7 +63,7 @@ export const Provider = (props) => {
     }
     // Game methods
     const handlePlayerMove = (e) => {
-        inGame.playerMove(e, activeRoom, user, player, opponent);
+        inGame.playerMove(e, activeRoom, user, player, opponent, handleErrors);
     }
     const handleLeaveGame = () => {
         inGame.handleLeaveGame(activeRoom, setActiveRoom, history);
@@ -65,18 +71,22 @@ export const Provider = (props) => {
 
     // State objects for providers props
     const state = {
+        accountAge,
         user,
         player,
         opponent,
         roomsList,
         activeRoom,
-        loading
+        loading,
+        error
     };
 
     const setState = {
         setPlayer, setOpponent, setActiveRoom, setLoading
     }
     const reducers = {
+        // Errors
+        handleErrors,
         //SignIn methods
         signInAnonymously,
         handleUserAuth,

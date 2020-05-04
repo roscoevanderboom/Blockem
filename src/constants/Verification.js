@@ -1,7 +1,7 @@
 
-export const isPlayerReady = (player) => {
-    if (!player) {
-        alert('Please select an avatar');
+export const isPlayerReady = (player, handleErrors) => {
+    if (!player.id) {
+        handleErrors('Please select an avatar');
         return false
     }
     return true;
@@ -15,7 +15,6 @@ export const areRoomsAvailable = (rooms) => {
 }
 export const isAvatarAvailable = (player, room) => {
     if (player.token.image === room.Host.token.image) {
-        alert("Host already selected that animal.");
         return false
     }
     return true;
