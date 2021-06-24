@@ -1,0 +1,25 @@
+{
+  "name": "tic-tac-farm",
+  "homepage": "https://tic-tac-farm.web.app/",
+  "authors": [
+    "roscoe van der boom"
+  ],
+  "description": "The Ultimate Tic Tac Toe game!",
+  "main": "dist/index.js",
+  "keywords": [
+    "tic tac toe",
+    "material-ui",
+    "game",
+    "firebase",
+    "react"
+  ],
+  "license": "Creative Commons",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}

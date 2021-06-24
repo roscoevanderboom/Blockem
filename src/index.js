@@ -1,21 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom'
-import { Provider } from './store';
-import './assets/css/index.css';
-import './assets/css/bootstrap.min.css'
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "./store";
+import { SnackbarProvider } from "notistack";
+
+import "assets/scss/material-kit-react.scss?v=1.10.0";
+import "assets/css/index.css";
+import "assets/css/app.css";
+import "assets/css/fonts.css";
+
+// pages for this product
+import App from "./App";
 
 ReactDOM.render(
+  <SnackbarProvider
+    anchorOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    preventDuplicate
+    hideIconVariant={false}
+    autoHideDuration={5000}
+    maxSnack={3}
+  >
     <BrowserRouter>
-        <Provider>
-            <App />
-        </Provider>
+      <Provider>
+        <App />
+      </Provider>
     </BrowserRouter>
-    , document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+  </SnackbarProvider>,
+  document.getElementById("root")
+);

@@ -1,59 +1,36 @@
-// Main imports
-import React, { useEffect, useContext } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import store from './store';
-import routes from './routes';
-import Loading from './containers/Loading';
-import ErrorModal from './components/ErrorModal';
-import { isUserInRoom, arePlayerReady } from './constants/Verification';
-import './assets/css/App.css';
-import './assets/css/Buttons.css';
+/* eslint-disable no-unused-vars */
+import React, { useContext } from "react";
+import { Switch, Route } from "react-router-dom";
+// Routes
+import routes from "./routes";
+import store from "./store";
+// Components
+import Loader from "components/Loader";
+import Menu from "components/Menu";
 
 function App() {
-    const { state, reducers, history, setState } = useContext(store);
-    const { user, roomsList, activeRoom, loading } = state;
+  const { userData, loading } = useContext(store);
+  const userNotNull = userData.user !== null;
+  const userIsAnonymous = userData.user !== null && userData.user.isAnonymous;
 
-    useEffect(() => {
-        reducers.handleUserAuth();
-        // eslint-disable-next-line
-    }, [user])
-
-    useEffect(() => {
-        isUserInRoom(roomsList, user)
-            .then((room) => reducers.watchGameroom(room.RoomID))
-            .catch(() => {
-                history.push('/');
-                setState.setLoading(false);
-            })
-        // eslint-disable-next-line
-    }, [roomsList])
-
-    useEffect(() => {
-        if (activeRoom && !activeRoom.Winner) {
-            arePlayerReady(activeRoom)
-                ? history.push('/gameroom')
-                : history.push('/waitingroom');
-        }
-        // eslint-disable-next-line
-    }, [activeRoom])
-
-    return (
-        <div className="App">
-            <div className="container-fluid">
-                <Switch>
-                    {routes.map((route, i) =>
-                        <Route
-                            key={i}
-                            path={route.path}
-                            exact={route.exact}
-                            component={route.component} />
-                    )}
-                </Switch>
-            </div>
-            <Loading loading={loading} />
-            <ErrorModal state={state} reducers={reducers} />
-        </div>
-    );
+  return (
+    <div className="App">
+      <div id="overlay">
+        <Switch>
+          {routes.map((route, i) => (
+            <Route
+              key={i}
+              path={route.path}
+              exact={route.exact}
+              component={route.component}
+            />
+          ))}
+        </Switch>
+        <Loader loading={loading} />
+        {userNotNull && userData.uid !== "" && !userIsAnonymous && <Menu />}
+      </div>
+    </div>
+  );
 }
 
 export default App;

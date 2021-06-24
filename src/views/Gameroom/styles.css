@@ -1,0 +1,79 @@
+.board {
+	max-width: 600px;
+	width: 600px;
+	height: 600px;
+	background-color: #cecfc2;
+	margin: 25px 0px;
+	border-radius: 6px;
+}
+
+.gameRoom-next-player-image {
+	font-size: calc(20px + 4vmin);
+	padding: 0px;
+	margin: 0px
+}
+
+.winner-icon {
+	font-size: 10rem;
+	text-align: center;
+}
+
+.winner-text {
+	color: firebrick;
+	font-weight: 700;
+	text-align: center;
+	font-size: xx-large;
+}
+
+.grid {
+	display: grid;
+	grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.big-square {
+	border: solid #3f51b5 1px
+}
+
+.restricted {
+	opacity: .5;
+	background-color: #000000;
+}
+
+.closed {
+	font-size: 5em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #2c3e50
+}
+
+.smallSquare {
+	border: 1px solid #2c3e50;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	font-size: 2rem;
+}
+
+@media only screen and (max-width: 500px) {
+	.board {
+		border-width: 5px;
+		width: 100vw;
+		height: 60vh;
+		margin-top: 0px;
+	}
+
+	#tokens {
+		width: 100%;
+	}
+
+	.smallSquare {
+		border: 1px solid #2c3e50;
+		font-size: 1.75rem;
+	}
+
+	.closed {
+		font-size: 5em;
+	}
+}

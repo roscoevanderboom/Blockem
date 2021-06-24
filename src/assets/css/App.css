@@ -1,33 +1,74 @@
-/* 
-
-*/
 .App {
+  text-align: center;
+  background-color: #282c34;
+  font-size: calc(10px + 2vmin);
   background-image: url('https://source.unsplash.com/featured/?animals');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: slategray;
+}
+
+#overlay {
+  background-color: rgb(0 0 0 / 57%); /* Black background with opacity */
+}
+
+.App-logo {
+  height: 30vmin;
+  pointer-events: none;
+}
+
+.loader-container {
   height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.fadeOut {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.2s linear 1s, opacity 0.2s;
-}
-
-.fadeIn {
-  visibility: visible;
-  opacity: 1;
-  transition: visibility 0.5s linear 0s, opacity 0.5s;
-}
-
-.container-fluid {
-  height: 100vh;
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #282c34;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.default-page-style {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color : white
+}
+
+.default-page-container {
+  width: 95%;
+  max-width: 600px;
+}
+
+.settings-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  margin-top: 40px
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }

@@ -1,115 +1,111 @@
-import React, { createContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-// Auth
-import * as auth from '../constants/firebase/Auth';
-// Pre-game methods
-import * as pregame from '../constants/PreGame';
-// Waitingroom mehods
-import * as waitingroom from '../constants/WaitingRoom';
-// In-Game methods
-import * as inGame from '../constants/GameRoom';
-
+import React, { createContext, useReducer, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
+// // Actions
+import { handleUserAuth } from "actions/auth";
+import { watchProfileData } from "actions/userProfiles";
+import { getUsernamesList } from "actions/usernamesList";
+import { fetchGamerooms } from "actions/preGame";
+import { watchFriendsList } from "actions/friendsList";
+// Feedback
+import { useSnackbar } from "notistack";
+import { createFeedback } from "../components/Feedback/index";
 // Initial state
-import * as init from './initialState';
-
+import { userDataInit, gameRoomsInit } from "./initialState";
+// Reducers
+import { gameRoomsReducer } from "../reducers/gameRoomsReducer";
+import { userDataReducer } from "../reducers/userDataReducer";
+// Constants
+import { basic_user_profile_data } from "constants/userProfileData";
 // Store
 const AppStore = createContext();
 
 export const Provider = (props) => {
-    const history = useHistory();
-    // User state
-    const [user, setUser] = useState(false);
-    const [accountAge, setAccountAge] = useState(0);
-    const [player, setPlayer] = useState(init.player);
-    const [opponent, setOpponent] = useState(false);
-    // Game State
-    const [roomsList, setRoomsList] = useState([]);
-    const [activeRoom, setActiveRoom] = useState(false);
-    // Error
-    const [error, setError] = useState(false);
-    // Loading
-    const [loading, setLoading] = useState(true);
+  const history = useHistory();
+  const [userData, dispatch_user] = useReducer(userDataReducer, userDataInit);
+  const [gameRoomsData, dispatch_gameRooms] = useReducer(
+    gameRoomsReducer,
+    gameRoomsInit
+  );
+  const { currentGames, roomsList } = gameRoomsData;
+  const { currentGame, user } = userData;
+  // Loading
+  const [loading, setLoading] = useState(true);
+  // Methods for user feedback
+  const { enqueueSnackbar } = useSnackbar();
+  const feedback = (variant, message, data) => {
+    createFeedback(variant, message, enqueueSnackbar, data);
+  };
 
-    // Error handling
-    const handleErrors = (message) => {
-        setError(error ? false : message);
-    }
-    // SignIn methods
-    const signInAnonymously = () => {
-        auth.signInAnonymously(setLoading);
-    }
-    const handleUserAuth = () => {
-        auth.handleUserAuth(setUser, history, fetchGamerooms, setAccountAge);
-    }
-    // Pre-game methods
-    const fetchGamerooms = () => {
-        pregame.fetchGamerooms(setRoomsList);
-    }
-    const watchGameroom = (RoomID) => {
-        pregame.watchGameroom(RoomID, user, setActiveRoom, setLoading);
-    }
-    const handleCreateGameRoom = () => {
-        pregame.handleCreateGameRoom(player, fetchGamerooms, setLoading, handleErrors);
-    }
-    const handleJoinRoom = () => {
-        pregame.handleJoinRoom(player, fetchGamerooms, setLoading, history, handleErrors);
-    }
-    // Waitingroom mehods
-    const handlePlayerReady = () => {
-        waitingroom.handlePlayerReady(activeRoom, user);
-    }
-    const handleLeaveWaitingRoom = () => {
-        waitingroom.handleLeaveWaitingRoom(user, activeRoom, setActiveRoom, history)
-    }
-    // Game methods
-    const handlePlayerMove = (e) => {
-        inGame.playerMove(e, activeRoom, user, player, opponent, handleErrors);
-    }
-    const handleLeaveGame = () => {
-        inGame.handleLeaveGame(activeRoom, setActiveRoom, history);
-    }
+  const userNotNull = user !== null;
+  const userIsAnonymous = user !== null && user.isAnonymous;
 
-    // State objects for providers props
-    const state = {
-        accountAge,
-        user,
-        player,
-        opponent,
-        roomsList,
-        activeRoom,
+  // Handle Auth signin and get the list of usernames
+  useEffect(() => {
+    handleUserAuth(history, dispatch_user, setLoading);
+    getUsernamesList(dispatch_user);
+  }, []);
+  // If user is logged in, get data and check room for current games
+  useEffect(() => {
+    if (userNotNull && !userIsAnonymous) {
+      watchProfileData(user, dispatch_user, setLoading, history);
+      fetchGamerooms(user.uid, dispatch_gameRooms);
+      watchFriendsList(user.uid, dispatch_user);
+    } else if (userNotNull && userIsAnonymous) {
+      dispatch_user({
+        type: "SET_PROFILE",
+        payload: basic_user_profile_data(user),
+      });
+      fetchGamerooms(user.uid, dispatch_gameRooms);
+      setLoading(false);
+    }
+  }, [user]);
+  // If user is logged in, get data and check room for current games
+  useEffect(() => {
+    currentGames.forEach((game) => {
+      if (
+        game.RoomID !== currentGame &&
+        userData.uid !== game.Host.uid &&
+        game.Type === "private"
+      ) {
+        feedback("joinRoom", "Would you like to join " + game.RoomName, {
+          userData,
+          game,
+        });
+      }
+    });
+  }, [currentGames, currentGame]);
+  // Go to gameroom if there is an active game
+  useEffect(() => {
+    if (currentGame) {
+      dispatch_gameRooms({
+        type: "SET_ACTIVE_ROOM",
+        payload: currentGame,
+      });
+      history.push("/gameRoom");
+    }
+  }, [currentGame]);
+
+  return (
+    <AppStore.Provider
+      value={{
+        userData,
+        dispatch_user,
+        gameRoomsData,
+        dispatch_gameRooms,
+        history,
+        feedback,
         loading,
-        error
-    };
+        setLoading,
+      }}
+    >
+      {props.children}
+    </AppStore.Provider>
+  );
+};
 
-    const setState = {
-        setPlayer, setOpponent, setActiveRoom, setLoading
-    }
-    const reducers = {
-        // Errors
-        handleErrors,
-        //SignIn methods
-        signInAnonymously,
-        handleUserAuth,
-        // Pre-game
-        fetchGamerooms,
-        watchGameroom,
-        handleCreateGameRoom,
-        handleJoinRoom,
-        // Waiting room methods
-        handlePlayerReady,
-        handleLeaveWaitingRoom,
-        // Game methods
-        handlePlayerMove,
-        handleLeaveGame
-    };
-
-
-    return (
-        <AppStore.Provider
-            value={{ state, setState, reducers, history }}>
-            {props.children}
-        </AppStore.Provider>
-    )
+Provider.propTypes = {
+  children: PropTypes.element,
 };
 
 export default AppStore;

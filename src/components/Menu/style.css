@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css?family=Crimson+Text&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Work+Sans&display=swap");
+.pie {
+  background: #000;
+  border-radius: 50%;
+  box-shadow: 0 0 4px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  height: 350px;
+  left: -200px;
+  position: fixed;
+  top: -200px;
+  width: 350px;
+  transform: translateX(-200px) translateY(-200px);
+  transition: transform 300ms;
+}
+.pie-color:hover {
+  opacity: 0.85;
+}
+.pie-color:active {
+  opacity: 0.7;
+}
+.pie1 {
+  clip-path: polygon(200px 200px, 344px 450px, 0 450px);
+  transition-delay: 30ms;
+}
+.pie2 {
+  clip-path: polygon(200px 200px, 344px 450px, 450px 344px);
+  transition-delay: 60ms;
+}
+.pie3 {
+  clip-path: polygon(200px 200px, 450px 0, 450px 344px);
+  transition-delay: 90ms;
+}
+.pie-color {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.pie-color1 {
+  background: linear-gradient(135deg, #f12711, #f5af19);
+  clip-path: polygon(200px 200px, 344px 450px, 0 450px);
+}
+.pie-color2 {
+  background: linear-gradient(135deg, #444, #7e84f9);
+  clip-path: polygon(200px 200px, 344px 450px, 450px 344px);
+}
+.pie-color3 {
+  background: linear-gradient(135deg, #444, #b7e13f);
+  clip-path: polygon(200px 200px, 450px 0, 450px 344px);
+}
+.settings {
+  left: 205px;
+  position: absolute;
+  top: 254px;
+  width: 46px;
+}
+.game-list {
+  left: 252px;
+  position: absolute;
+  top: 225px;
+  width: 46px;
+}
+.profile {
+  left: 280px;
+  position: absolute;
+  top: 178px;
+  width: 46px;
+}
+.menu {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 4px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  height: 165px;
+  left: -100px;
+  position: fixed;
+  top: -100px;
+  width: 165px;
+}
+.hamburger {
+  cursor: pointer;
+  height: 40px;
+  left: 24%;
+  position: relative;
+  top: 62%;
+  width: 40px;
+}
+.title {
+  color: white;
+  font-family: "Crimson Text", serif;
+  font-size: 80px;
+  line-height: 84px;
+  margin-top: 60px;
+  text-align: center;
+}
+.body {
+  color: white;
+  font-family: "Work Sans", sans-serif;
+  font-size: 20px;
+  justify-content: center;
+  line-height: 28px;
+  margin: 30px auto;
+  max-width: 600px;
+  text-align: center;
+}
+.hamburger path {
+  transition: transform 300ms;
+}
+.hamburger path:nth-child(1) {
+  transform-origin: 25% 29%;
+}
+.hamburger path:nth-child(2) {
+  transform-origin: 50% 50%;
+}
+.hamburger path:nth-child(3) {
+  transform-origin: 75% 72%;
+}
+.hamburger path:nth-child(4) {
+  transform-origin: 75% 29%;
+}
+.hamburger path:nth-child(5) {
+  transform-origin: 25% 72%;
+}
+.active .pie {
+  transform: translateX(0) translateY(0);
+}
+.active .hamburger path:nth-child(1) {
+  transform: rotate(45deg);
+}
+.active .hamburger path:nth-child(2) {
+  transform: scaleX(0);
+}
+.active .hamburger path:nth-child(3) {
+  transform: rotate(45deg);
+}
+.active .hamburger path:nth-child(4) {
+  transform: rotate(-45deg);
+}
+.active .hamburger path:nth-child(5) {
+  transform: rotate(-45deg);
+}
